@@ -1,6 +1,6 @@
 """
 Entity Extractor
-Version: 4.0
+Version: 5.0
 """
 
 import re
@@ -11,37 +11,19 @@ class EntityExtractor:
     def __init__(self):
         pass
 
-    def clean(self, value: str) -> str:
+    def clean(self, value: str):
 
         value = re.sub(r"\s+", " ", value)
 
         return value.strip(" .:-")
 
-    def extract(self, text: str) -> str:
+    def extract(self, text: str):
 
         patterns = [
 
-            r"Name\s+of\s+the\s+entity\s+awarding.*?\n\s*([^\n]+)",
+            r"entity\s+awarding\s+the\s+(.*)",
 
-            r"name\s+of\s+the\s+entity\s+awarding.*?\n\s*([^\n]+)",
-
-            r"1\s+Name\s+of\s+the\s+entity\s+awarding.*?\n\s*([^\n]+)",
-
-            r"a\)\s*name\s+of\s+the\s+entity\s+awarding.*?\n\s*([^\n]+)",
-
-        ]
-
-        skip_words = [
-
-            "significant",
-            "terms",
-            "conditions",
-            "particulars",
-            "response",
-            "details",
-            "order(s)",
-            "contract(s)",
-            "awarded in brief"
+            r"entity\s+awardinq\s+the\s+(.*)",
 
         ]
 
@@ -50,19 +32,27 @@ class EntityExtractor:
             match = re.search(
                 pattern,
                 text,
-                re.IGNORECASE | re.DOTALL
+                re.IGNORECASE
             )
 
             if not match:
                 continue
 
-            candidate = self.clean(match.group(1))
+            value = self.clean(
+                match.group(1)
+            )
 
-            lower = candidate.lower()
+            value = re.sub(
+                r"order.*",
+                "",
+                value,
+                flags=re.IGNORECASE
+            )
 
-            if any(word in lower for word in skip_words):
-                continue
+            value = self.clean(value)
 
-            return candidate
+            if value:
+
+                return value
 
         return ""

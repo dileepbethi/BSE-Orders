@@ -21,7 +21,7 @@ for file in sorted(RAW_FOLDER.glob("*.txt")):
 
         lower = line.lower()
 
-        if any(k in lower for k in KEYWORDS):
+        if any(keyword in lower for keyword in KEYWORDS):
 
             print("=" * 80)
             print(file.name)
@@ -31,7 +31,6 @@ for file in sorted(RAW_FOLDER.glob("*.txt")):
             end = min(len(lines), i + 10)
 
             for j in range(start, end):
-
                 print(f"{j:03}: {lines[j]}")
 
             print()
