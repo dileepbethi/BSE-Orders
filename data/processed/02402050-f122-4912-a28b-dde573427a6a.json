@@ -1,11 +1,11 @@
 {
-    "company": "",
-    "announcement_date": "",
-    "awarding_entity": "",
-    "order_value": "",
-    "execution_period": "",
-    "order_type": "",
-    "domestic": "",
-    "project_description": "",
+    "company": "Atishay Limited",
+    "announcement_date": "07.07.2026",
+    "awarding_entity": "Bharat Sanchar Nigam Limited, Bhopal",
+    "order_value": "47.06 Lakhs",
+    "execution_period": "One Year from the date of issuing of installation and commissioning certificate",
+    "order_type": "Work order for Supply, Installation and Commissioning of Wi-Fi, Network and comprehensive AMC work at IIFM, Bhopal",
+    "domestic": "Domestic",
+    "project_description": "Supply, Installation and Commissioning of Wi-Fi, Network and comprehensive AMC work at IIFM, Bhopal",
     "source_file": "02402050-f122-4912-a28b-dde573427a6a.txt"
 }
