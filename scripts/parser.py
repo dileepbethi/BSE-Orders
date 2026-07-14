@@ -7,80 +7,74 @@ def get_result_rows(page: Page):
 
     records = []
 
-    rows = page.locator("tr")
+    rows = page.locator("tbody tr")
+
     total = rows.count()
 
-    print(f"\n[INFO] Total TR Rows : {total}\n")
+    print(f"\n[INFO] Total tbody TR Rows : {total}\n")
 
-    current = None
+    i = 0
 
-    for i in range(total):
+    while i < total:
 
         try:
-            text = rows.nth(i).inner_text(timeout=1000).strip()
+
+            header = rows.nth(i).inner_text().strip()
 
         except:
+
+            i += 1
             continue
 
-        if not text:
-            continue
-
-        # Ignore date row
-        if text.startswith("07 Jul") or text.startswith("08 Jul"):
-            continue
-
-        # Company Header
         if (
-            "Announcement under Regulation 30" in text
-            and "Award_of_Order_Receipt_of_Order" in text
+            "Announcement under Regulation 30" not in header
+            or
+            "Award_of_Order_Receipt_of_Order" not in header
         ):
-
-            if current:
-                records.append(current)
-
-            current = {
-                "header": text,
-                "description": "",
-                "exchange_time": "",
-                "pdf": ""
-            }
-
-            try:
-                href = rows.nth(i).locator("a.tablebluelink").get_attribute("href")
-
-                if href:
-
-                    current["pdf"] = BASE_URL + href
-
-                    print("\n-----------------------")
-                    print(current["header"])
-                    print(current["pdf"])
-                    print("-----------------------")
-
-            except:
-                pass
-
+            i += 1
             continue
 
-        if current is None:
-            continue
-
-        # Exchange Time
-
-        if "Exchange Received Time" in text:
-
-            current["exchange_time"] = text
-
-            continue
+        description = ""
+        exchange_time = ""
+        pdf = ""
 
         # Description
+        if i + 1 < total:
 
-        if current["description"] == "":
+            description = rows.nth(i + 1).inner_text().strip()
 
-            current["description"] = text
+        # Exchange Time
+        if i + 2 < total:
 
-    if current:
+            exchange_time = rows.nth(i + 2).inner_text().strip()
 
-        records.append(current)
+        # PDF Link
+        try:
+
+            href = rows.nth(i).locator(
+                "a.tablebluelink"
+            ).get_attribute("href")
+
+            if href:
+
+                pdf = BASE_URL + href
+
+        except:
+
+            pass
+
+        records.append({
+
+            "header": header,
+
+            "description": description,
+
+            "exchange_time": exchange_time,
+
+            "pdf": pdf
+
+        })
+
+        i += 4
 
     return records

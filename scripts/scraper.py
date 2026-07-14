@@ -7,7 +7,10 @@ from parser import get_result_rows
 from downloader import download_pdf
 
 
-def open_bse():
+def open_bse(
+    from_date,
+    to_date
+):
 
     download_folder = Path("data/downloads")
     download_folder.mkdir(parents=True, exist_ok=True)
@@ -32,11 +35,15 @@ def open_bse():
             timeout=60000
         )
 
-        page.wait_for_load_state("networkidle")
+        page.wait_for_timeout(3000)
 
         print("[INFO] Applying Filters...")
 
-        apply_filters(page)
+        apply_filters(
+     page,
+    from_date,
+    to_date
+)
 
         records = get_result_rows(page)
 
@@ -80,6 +87,7 @@ def open_bse():
                     try:
 
                         download_pdf(record["pdf"])
+                        success += 1
 
                     except Exception as e:
 
@@ -111,4 +119,11 @@ def open_bse():
 
 
 if __name__ == "__main__":
-    open_bse()
+
+    open_bse(
+
+        "14-07-2026",
+
+        "14-07-2026"
+
+    )
