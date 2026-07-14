@@ -100,10 +100,50 @@ class PDFParser:
             encoding="utf-8"
 
         )
+def process_files(self, txt_files):
 
+    print()
+    print("=" * 60)
+    print("BSE ORDERS PARSER")
+    print("=" * 60)
+    print()
+
+    print(f"Found {len(txt_files)} TXT files")
+    print()
+
+    for index, file in enumerate(txt_files, start=1):
+
+        text = self.read_file(file)
+
+        record = self.build_record(
+            file,
+            text
+        )
+
+        self.save_json(
+            file,
+            record
+        )
+
+        self.database.insert(
+            record
+        )
+
+        print(f"[{index:02}] {file.name}")
+        print("     JSON Saved")
+        print("     Database Saved")
+
+    print()
+    print("=" * 60)
+    print(
+        f"Database Records : {self.database.count()}"
+    )
+    print("=" * 60)
+
+    self.database.close()
     def run(self):
 
-        files = self.load_files()
+        txt_files = self.load_files()
 
         print()
         print("=" * 60)
@@ -114,7 +154,7 @@ class PDFParser:
         print(f"Found {len(files)} TXT files")
         print()
 
-        for index, file in enumerate(files, start=1):
+        for index, file in enumerate(txt_files, start=1):
 
             text = self.read_file(file)
 

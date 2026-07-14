@@ -60,6 +60,7 @@ def open_bse(
 
             success = 0
             failed = 0
+            downloaded_files = []
 
             for i, record in enumerate(records, start=1):
 
@@ -86,7 +87,8 @@ def open_bse(
 
                     try:
 
-                        download_pdf(record["pdf"])
+                        saved_pdf = download_pdf(record["pdf"])
+                        downloaded_files.append(saved_pdf)
                         success += 1
 
                     except Exception as e:
@@ -116,6 +118,8 @@ def open_bse(
         context.close()
 
         browser.close()
+
+        return downloaded_files
 
 
 if __name__ == "__main__":

@@ -53,14 +53,19 @@ def apply_filters(
         label="Company Update"
     )
 
-    print("[INFO] Waiting for Sub Category options...")
+    print("[INFO] Waiting for Sub Category to populate...")
 
-    page.wait_for_function("""
-    () => {
-        const ddl = document.querySelector("#ddlsubcat");
-        return ddl && ddl.options.length > 1;
-    }
-    """, timeout=60000)
+    page.wait_for_function(
+        """
+        () => {
+            const ddl = document.querySelector("#ddlsubcat");
+            return ddl && ddl.options.length > 100;
+        }
+        """,
+        timeout=10000
+    )
+
+    print("[SUCCESS] Sub Category Loaded")
 
     print("[5/8] Sub Category")
 
