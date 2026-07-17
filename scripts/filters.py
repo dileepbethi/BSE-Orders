@@ -1,5 +1,6 @@
 from playwright.sync_api import Page
 
+from page_waiter import wait_for_bse_filters
 from date_picker import DatePicker
 
 
@@ -13,26 +14,11 @@ def apply_filters(
 
     print("[1/8] Waiting for page...")
 
-    page.wait_for_load_state("domcontentloaded")
-
-    page.locator("#ddlAnnType").wait_for(
-        state="visible",
-        timeout=60000
-    )
-
-    page.locator("#ddlAnnsubmType").wait_for(
-        state="visible",
-        timeout=60000
-    )
-
-    page.locator("#ddlPeriod").wait_for(
-        state="visible",
-        timeout=60000
-    )
+    wait_for_bse_filters(page)
 
     page.locator("#ddlsubcat").wait_for(
         state="visible",
-        timeout=60000
+        timeout=15000
     )
 
     print("[2/8] Segment")
@@ -53,25 +39,33 @@ def apply_filters(
         label="Company Update"
     )
 
-    print("[INFO] Waiting for Sub Category to populate...")
+    print("[INFO] Waiting for Sub Category...")
 
-    page.wait_for_function(
-        """
-        () => {
-            const ddl = document.querySelector("#ddlsubcat");
-            return ddl && ddl.options.length > 100;
-        }
-        """,
-        timeout=10000
-    )
+    page.wait_for_timeout(3000)
 
-    print("[SUCCESS] Sub Category Loaded")
+    try:
 
-    print("[5/8] Sub Category")
+        page.locator("#ddlsubcat").select_option(
+            label="Award of Order / Receipt of Order"
+        )
 
-    page.locator("#ddlsubcat").select_option(
-        label="Award of Order / Receipt of Order"
-    )
+    except Exception:
+
+        print("[WARN] Sub Category not ready. Reloading page...")
+
+        page.reload(wait_until="domcontentloaded")
+
+        page.wait_for_timeout(3000)
+
+        page.locator("#ddlAnnType").select_option(label="Equity")
+        page.locator("#ddlAnnsubmType").select_option(label="Announcement")
+        page.locator("#ddlPeriod").select_option(label="Company Update")
+
+        page.wait_for_timeout(3000)
+
+        page.locator("#ddlsubcat").select_option(
+            label="Award of Order / Receipt of Order"
+        )
 
     print("[6/8] From Date")
 

@@ -47,7 +47,10 @@ def process_pdf(pdf_path):
 
     print(f"[PDF] Saved : {txt_file.name}")
 
-    return txt_file
+    return {
+        "pdf": pdf_file,
+        "txt": txt_file
+    }
 
 
 def process_pdfs(pdf_paths):
@@ -61,9 +64,9 @@ def process_pdfs(pdf_paths):
 
         try:
 
-            txt_file = process_pdf(pdf_path)
+            item = process_pdf(pdf_path)
 
-            txt_files.append(txt_file)
+            txt_files.append(item)
 
             success += 1
 

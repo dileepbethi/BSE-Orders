@@ -14,6 +14,7 @@ from order_value_extractor import OrderValueExtractor
 from entity_extractor import EntityExtractor
 from field_parser import FieldParser
 from field_cleaner import FieldCleaner
+from table_parser_v2 import TableParserV2
 from database_manager import DatabaseManager
 
 
@@ -32,6 +33,7 @@ class PDFParser:
 
         self.field_parser = FieldParser()
         self.field_cleaner = FieldCleaner()
+        self.table_parser = TableParserV2()
 
         self.database = DatabaseManager()
 
@@ -71,7 +73,11 @@ class PDFParser:
 
             "awarding_entity": fields["entity_awarding"],
 
-            "order_value": self.order_value_extractor.extract(text),
+"order_value": (
+    fields["order_value"]
+    if fields["order_value"]
+    else self.order_value_extractor.extract(text)
+),
 
             "execution_period": fields["execution_period"],
 
@@ -100,50 +106,7 @@ class PDFParser:
             encoding="utf-8"
 
         )
-def process_files(self, txt_files):
-
-    print()
-    print("=" * 60)
-    print("BSE ORDERS PARSER")
-    print("=" * 60)
-    print()
-
-    print(f"Found {len(txt_files)} TXT files")
-    print()
-
-    for index, file in enumerate(txt_files, start=1):
-
-        text = self.read_file(file)
-
-        record = self.build_record(
-            file,
-            text
-        )
-
-        self.save_json(
-            file,
-            record
-        )
-
-        self.database.insert(
-            record
-        )
-
-        print(f"[{index:02}] {file.name}")
-        print("     JSON Saved")
-        print("     Database Saved")
-
-    print()
-    print("=" * 60)
-    print(
-        f"Database Records : {self.database.count()}"
-    )
-    print("=" * 60)
-
-    self.database.close()
-    def run(self):
-
-        txt_files = self.load_files()
+    def process_files(self, txt_files):
 
         print()
         print("=" * 60)
@@ -151,50 +114,68 @@ def process_files(self, txt_files):
         print("=" * 60)
         print()
 
-        print(f"Found {len(files)} TXT files")
+        print(f"Found {len(txt_files)} TXT files")
         print()
 
-        for index, file in enumerate(txt_files, start=1):
+        success = 0
 
-            text = self.read_file(file)
+        for index, item in enumerate(txt_files, start=1):
 
-            record = self.build_record(
-                file,
-                text
-            )
+            try:
 
-            self.save_json(
-                file,
-                record
-            )
+                txt_file = item["txt"]
+                pdf_file = item["pdf"]
+                text = self.read_file(txt_file)
 
-            self.database.insert(
-                record
-            )
+                record = self.build_record(
+                    txt_file,
+                    text
+                )
 
-            print(f"[{index:02}] {file.name}")
-            print(f"     JSON Saved")
-            print(f"     Database Saved")
+                self.save_json(
+                  txt_file,
+                  record
+                )
+                self.database.insert(
+                    record
+                )
+
+                success += 1
+
+                print(f"[{index:02}] {txt_file.name}")
+                print("     JSON Saved")
+                print("     Database Saved")
+
+            except Exception as e:
+
+                print(f"[ERROR] {txt_file.name}")
+                print(e)
 
         print()
-
         print("=" * 60)
-
-        print(
-            f"Database Records : {self.database.count()}"
-        )
-
+        print(f"Processed Records : {success}")
+        print(f"Database Records  : {self.database.count()}")
         print("=" * 60)
 
         self.database.close()
 
+        return success
 
+
+    def run(self):
+
+        txt_files = self.load_files()
+
+        return self.process_files(
+            txt_files
+        )
+
+    
 def main():
 
     parser = PDFParser()
 
     parser.run()
-
 
 if __name__ == "__main__":
 

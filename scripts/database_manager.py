@@ -105,12 +105,59 @@ class DatabaseManager:
     def count(self):
 
         self.cursor.execute(
-
             "SELECT COUNT(*) FROM orders"
-
         )
 
         return self.cursor.fetchone()[0]
+
+
+    def get_all(self):
+
+        self.cursor.execute("""
+
+            SELECT *
+
+            FROM orders
+
+            ORDER BY announcement_date DESC
+
+        """)
+
+        return self.cursor.fetchall()
+
+
+    def find_company(self, company):
+
+        self.cursor.execute("""
+
+            SELECT *
+
+            FROM orders
+
+            WHERE company LIKE ?
+
+            ORDER BY announcement_date DESC
+
+        """, (f"%{company}%",))
+
+        return self.cursor.fetchall()
+
+
+    def latest(self, limit=20):
+
+        self.cursor.execute("""
+
+            SELECT *
+
+            FROM orders
+
+            ORDER BY created_at DESC
+
+            LIMIT ?
+
+        """, (limit,))
+
+        return self.cursor.fetchall()
 
     def close(self):
 
