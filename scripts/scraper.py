@@ -17,7 +17,7 @@ def open_bse(from_date, to_date):
     with sync_playwright() as p:
 
         browser = p.chromium.launch(
-            headless=False
+            headless=False,
             args=[
                 "--disable-gpu",
                 "--disable-dev-shm-usage",
@@ -31,14 +31,32 @@ def open_bse(from_date, to_date):
 
         page = context.new_page()
 
+        print("=" * 70)
+        print("BSE COLLECTOR")
+        print("=" * 70)
+
         print("[INFO] Opening BSE...")
 
         page.goto(
             "https://www.bseindia.com/corporates/ann.html",
             wait_until="domcontentloaded",
+            timeout=60000,
+        )
+
+        print("[INFO] Waiting for Angular application...")
+
+        page.wait_for_selector(
+            "#ddlAnnType",
+            state="visible",
             timeout=60000
         )
-        page.wait_for_timeout(5000)
+
+        page.wait_for_timeout(2000)
+
+        page.screenshot(
+            path="page_debug.png",
+            full_page=True
+        )
 
         print("\nCurrent URL:")
         print(page.url)
@@ -46,28 +64,7 @@ def open_bse(from_date, to_date):
         print("\nTitle:")
         print(page.title())
 
-        page.screenshot(
-            path="page_debug.png",
-            full_page=True
-   )
-
         print("\nScreenshot saved as page_debug.png")
-
-        print("[INFO] Waiting for Angular page...")
-
-        page.wait_for_timeout(5000)
-
-        page.wait_for_load_state("domcontentloaded")
-
-        print("[INFO] Current URL:", page.url)
-
-        print("[INFO] ddlAnnType count:",
-              page.locator("#ddlAnnType").count())
-
-        page.wait_for_selector(
-            "#ddlAnnType",
-            timeout=30000
-        )
 
         print("[INFO] Applying Filters...")
 
@@ -119,7 +116,9 @@ def open_bse(from_date, to_date):
                     try:
 
                         saved_pdf = download_pdf(record["pdf"])
+
                         downloaded_files.append(saved_pdf)
+
                         success += 1
 
                     except Exception as e:

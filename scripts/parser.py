@@ -8,7 +8,6 @@ def get_result_rows(page: Page):
     records = []
 
     rows = page.locator("tbody tr")
-
     total = rows.count()
 
     print(f"\n[INFO] Total tbody TR Rows : {total}\n")
@@ -18,63 +17,51 @@ def get_result_rows(page: Page):
     while i < total:
 
         try:
+            row = rows.nth(i)
 
-            header = rows.nth(i).inner_text().strip()
+            pdf_locator = row.locator("a.tablebluelink")
 
-        except:
+            if pdf_locator.count() == 0:
+                i += 1
+                continue
 
-            i += 1
-            continue
+            header = row.inner_text().strip()
 
-        if (
-            "Announcement under Regulation 30" not in header
-            or
-            "Award_of_Order_Receipt_of_Order" not in header
-        ):
-            i += 1
-            continue
+            href = pdf_locator.first.get_attribute("href")
 
-        description = ""
-        exchange_time = ""
-        pdf = ""
-
-        # Description
-        if i + 1 < total:
-
-            description = rows.nth(i + 1).inner_text().strip()
-
-        # Exchange Time
-        if i + 2 < total:
-
-            exchange_time = rows.nth(i + 2).inner_text().strip()
-
-        # PDF Link
-        try:
-
-            href = rows.nth(i).locator(
-                "a.tablebluelink"
-            ).get_attribute("href")
+            pdf = ""
 
             if href:
 
-                pdf = BASE_URL + href
+                if href.startswith("http"):
+                    pdf = href
+                else:
+                    pdf = BASE_URL + href
 
-        except:
+            description = ""
+            exchange_time = ""
 
-            pass
+            if i + 1 < total:
+                description = rows.nth(i + 1).inner_text().strip()
 
-        records.append({
+            if i + 2 < total:
+                exchange_time = rows.nth(i + 2).inner_text().strip()
 
-            "header": header,
+            records.append(
+                {
+                    "header": header,
+                    "description": description,
+                    "exchange_time": exchange_time,
+                    "pdf": pdf,
+                }
+            )
 
-            "description": description,
+            print(f"[FOUND] {header[:80]}")
 
-            "exchange_time": exchange_time,
+        except Exception as e:
 
-            "pdf": pdf
+            print(f"[WARNING] Row {i}: {e}")
 
-        })
-
-        i += 4
+        i += 1
 
     return records
