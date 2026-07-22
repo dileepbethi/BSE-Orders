@@ -3,6 +3,7 @@
     "announcement_date": "July 07, 2026",
     "awarding_entity": "M/s Reliance Industries Ltd. (RIL)",
     "order_value": "Work Order Value is ~Rs. 166.82 Crores",
+    "order_value_crore": 166.82,
     "execution_period": "",
     "order_type": "Imparting CBM Production services in the state of Madhya Pradesh",
     "domestic": "",

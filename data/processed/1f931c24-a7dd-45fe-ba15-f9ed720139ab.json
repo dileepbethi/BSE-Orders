@@ -3,6 +3,7 @@
     "announcement_date": "",
     "awarding_entity": "Central Warehousing Corporation",
     "order_value": "Rs. 70.72 crores (",
+    "order_value_crore": 70.72,
     "execution_period": "",
     "order_type": "Manufacture and Supply of BLSS rakes along with Brake Van",
     "domestic": "Domestic",
