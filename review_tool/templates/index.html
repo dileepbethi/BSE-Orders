@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>BSE Orders Review Tool</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="app-layout">
+
+    <!-- =========================
+         LEFT SIDEBAR
+    ========================== -->
+
+    <aside class="left-sidebar">
+
+        <div class="sidebar-header">
+
+    <h1>BSE Orders</h1>
+
+    <p>
+        Review Workspace
+    </p>
+
+    <div class="progress-card">
+
+        <div class="progress-header">
+
+            <span>Review Progress</span>
+
+            <strong>{{ progress_percent }}%</strong>
+
+        </div>
+
+        <div class="progress-bar">
+
+            <div class="progress-fill"
+                style="--progress: {{ progress_percent }}%;">
+
+            </div>
+
+        </div>
+
+        <div class="progress-footer">
+
+            {{ reviewed_count }} / {{ total }} Reviewed
+
+        </div>
+
+    </div>
+
+</div>
+
+        <input
+            type="text"
+            id="companySearch"
+            class="company-search"
+            placeholder="🔍 Search company...">
+
+        <div class="company-list">
+
+            {% for company in company_list %}
+
+            <div
+                class="company-item {% if company.index == index %}active{% endif %}"
+                data-company="{{ company.company|lower }}">
+
+                <a href="/?index={{ company.index }}">
+
+                    {% if company.status == "Reviewed" %}
+                        🟢
+                    {% else %}
+                        🟠
+                    {% endif %}
+
+                    {{ company.company }}
+
+                </a>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </aside>
+        <!-- =========================
+         CENTER PDF VIEWER
+    ========================== -->
+
+    <main class="pdf-panel">
+
+        <div class="panel-header">
+
+            <div>
+
+                <h2>Announcement PDF</h2>
+
+                <p>
+                    Review the original corporate announcement while editing the extracted data.
+                </p>
+
+            </div>
+
+            <a href="{{ pdf_url }}"
+               target="_blank"
+               class="open-pdf-btn">
+
+                ↗ Open in New Tab
+
+            </a>
+
+        </div>
+
+<div class="pdf-container"
+     data-pdf-url="{{ pdf_url }}">
+
+    <!-- Temporary PDF.js Canvas -->
+
+    <canvas id="pdf-canvas"></canvas>
+
+    <!-- Keep iframe for now -->
+
+    <iframe
+        src="{{ pdf_url }}"
+        class="pdf-frame"
+        id="pdf-fallback">
+
+    </iframe>
+
+</div>
+        
+</main>
+        <!-- =========================
+         RIGHT REVIEW PANEL
+    ========================== -->
+
+    <aside class="review-panel">
+
+        <form method="POST">
+
+            <input
+                type="hidden"
+                name="index"
+                value="{{ index }}">
+
+            <div class="review-header">
+
+                <h2>Review Details</h2>
+
+                <p>
+                    Edit and verify the extracted information.
+                </p>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Company</label>
+
+                <input
+                    type="text"
+                    name="company"
+                    value="{{ record.company }}">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Announcement Date</label>
+
+                <input
+                    type="text"
+                    name="announcement_date"
+                    value="{{ record.announcement_date }}">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Awarding Entity</label>
+
+                <input
+                    type="text"
+                    name="awarding_entity"
+                    value="{{ record.awarding_entity }}">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Order Value</label>
+
+                <input
+                    type="text"
+                    name="order_value"
+                    value="{{ record.order_value }}">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Execution Period</label>
+
+                <input
+                    type="text"
+                    name="execution_period"
+                    value="{{ record.execution_period }}">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Order Type</label>
+
+                <input
+                    type="text"
+                    name="order_type"
+                    value="{{ record.order_type }}">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Domestic / International</label>
+
+                <input
+                    type="text"
+                    name="domestic"
+                    value="{{ record.domestic }}">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Review Status</label>
+
+                <select name="review_status">
+
+                    <option
+                        value="Pending"
+                        {% if record.review_status == "Pending" %}selected{% endif %}>
+                        Pending
+                    </option>
+
+                    <option
+                        value="Reviewed"
+                        {% if record.review_status == "Reviewed" %}selected{% endif %}>
+                        Reviewed
+                    </option>
+
+                </select>
+
+            </div>
+            <div class="action-bar">
+
+                <button
+                    type="submit"
+                    class="save-btn">
+
+                    💾 Save Review
+
+                </button>
+
+                {% if has_previous %}
+
+                <a
+                    href="/?index={{ index - 1 }}"
+                    class="nav-btn">
+
+                    ← Previous
+
+                </a>
+
+                {% endif %}
+
+                {% if has_next %}
+
+                <a
+                    href="/?index={{ index + 1 }}"
+                    class="nav-btn">
+
+                    Next →
+
+                </a>
+
+                {% endif %}
+
+            </div>
+
+        </form>
+
+        <div class="review-info">
+
+            <div class="info-card">
+
+                <h3>Review Quality</h3>
+
+                <div class="score">
+
+                    {{ review_score.score }}%
+
+                </div>
+
+                <p>
+
+                    {{ "⭐" * review_score.stars }}
+
+                </p>
+
+            </div>
+
+            <div class="info-card">
+
+                <h3>Missing Information</h3>
+
+                {% if missing_fields %}
+
+                <ul>
+
+                    {% for field in missing_fields %}
+
+                    <li>{{ field }}</li>
+
+                    {% endfor %}
+
+                </ul>
+
+                {% else %}
+
+                <p>✅ No missing fields.</p>
+
+                {% endif %}
+
+            </div>
+
+            <div class="info-card">
+
+                <h3>Quick Links</h3>
+
+                <p>
+                    <a href="{{ links.screener }}" target="_blank">
+                        Screener
+                    </a>
+                </p>
+
+                <p>
+                    <a href="{{ links.bse }}" target="_blank">
+                        BSE
+                    </a>
+                </p>
+
+                <p>
+                    <a href="{{ links.nse }}" target="_blank">
+                        NSE
+                    </a>
+                </p>
+
+            </div>
+
+        </div>
+
+    </aside>
+</div>
+
+<script>
+
+const search = document.getElementById("companySearch");
+
+if (search) {
+
+    search.addEventListener("keyup", function () {
+
+        const value = this.value.toLowerCase();
+
+        document.querySelectorAll(".company-item").forEach(function(item){
+
+            if (item.dataset.company.includes(value)) {
+
+                item.style.display = "";
+
+            } else {
+
+                item.style.display = "none";
+
+            }
+
+        });
+
+    });
+
+}
+
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.min.mjs" type="module"></script>
+
+<script type="module" src="{{ url_for('static', filename='pdfviewer.js') }}"></script>
+
+</body>
+</html>
