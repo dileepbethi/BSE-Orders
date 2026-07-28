@@ -1,4 +1,4 @@
-from quality_classifier_v2 import QualityClassifierV2
+tree scripts /Ffrom quality_classifier_v2 import QualityClassifierV2
 
 
 sample_text = """

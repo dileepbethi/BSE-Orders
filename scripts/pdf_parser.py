@@ -21,15 +21,17 @@ SQLite
 from pathlib import Path
 import json
 
-from company_extractor import CompanyExtractor
-from date_extractor import DateExtractor
-from order_value_extractor import OrderValueExtractor
-from entity_extractor import EntityExtractor
-from field_parser import FieldParser
-from field_cleaner import FieldCleaner
-from table_parser_v2 import TableParserV2
-from database_manager import DatabaseManager
-from quality_classifier_v2 import QualityClassifierV2
+from scripts.company_extractor import CompanyExtractor
+from scripts.date_extractor import DateExtractor
+from scripts.order_value_extractor import OrderValueExtractor
+from scripts.announcement_classifier import AnnouncementClassifier
+from scripts.entity_extractor import EntityExtractor
+from scripts.field_parser import FieldParser
+from scripts.field_cleaner import FieldCleaner
+from scripts.table_parser_v2 import TableParserV2
+from scripts.database_manager import DatabaseManager
+from scripts.quality_classifier_v2 import QualityClassifierV2
+from scripts.record_validator import RecordValidator
 
 
 RAW_FOLDER = Path("data/raw")
@@ -43,6 +45,7 @@ class PDFParser:
         self.company_extractor = CompanyExtractor()
         self.date_extractor = DateExtractor()
         self.order_value_extractor = OrderValueExtractor()
+        self.announcement_classifier = AnnouncementClassifier()
         self.entity_extractor = EntityExtractor()
 
         self.field_parser = FieldParser()
@@ -50,6 +53,8 @@ class PDFParser:
         self.table_parser = TableParserV2()
 
         self.quality_classifier = QualityClassifierV2()
+
+        self.record_validator = RecordValidator()
 
         self.database = DatabaseManager()
 
@@ -95,6 +100,8 @@ class PDFParser:
         return {
 
             "company": self.company_extractor.extract(text),
+
+            "announcement_type": self.announcement_classifier.classify(text),   
 
             "announcement_date": self.date_extractor.extract(text),
 
@@ -162,6 +169,18 @@ class PDFParser:
                     text
                 )
 
+                validation = self.record_validator.validate(
+                    record
+                )
+
+                if not validation["valid"]:
+
+                    print(f"[{index:02}] {txt_file.name}")
+                    print("     Skipped (Invalid record)")
+                    for error in validation["errors"]:
+                        print(f"         - {error}")
+                    continue
+
                 self.save_json(
                     txt_file,
                     record
@@ -195,16 +214,18 @@ class PDFParser:
         self.database.close()
 
         return success
-    def run(self):
+    def run(self, txt_files=None):
 
-        txt_files = self.load_files()
+        if txt_files is None:
+
+            txt_files = self.load_files()
 
         if not txt_files:
 
             print("No TXT files found in data/raw")
             return
 
-        self.process_files(txt_files)
+        return self.process_files(txt_files)
 def main():
 
     parser = PDFParser()

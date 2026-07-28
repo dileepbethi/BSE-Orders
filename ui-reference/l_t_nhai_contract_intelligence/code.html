@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Announcement Intelligence Workspace | OrderIQ</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        :root {
+            --surface-container: #1d2027;
+            --surface-container-high: #272a31;
+            --surface-container-highest: #32353c;
+        }
+        body {
+            background-color: #10131a;
+            color: #e1e2ec;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #424754;
+            border-radius: 10px;
+        }
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(8px);
+            border: 1px solid #334155;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#311400",
+                        "on-error": "#690005",
+                        "primary-fixed-dim": "#adc6ff",
+                        "secondary-fixed": "#6ffbbe",
+                        "secondary-fixed-dim": "#4edea3",
+                        "inverse-surface": "#e1e2ec",
+                        "on-surface-variant": "#c2c6d6",
+                        "tertiary": "#ffb786",
+                        "tertiary-fixed-dim": "#ffb786",
+                        "secondary": "#4edea3",
+                        "surface-container-high": "#272a31",
+                        "primary": "#adc6ff",
+                        "on-surface": "#e1e2ec",
+                        "surface-bright": "#363941",
+                        "on-primary-container": "#00285d",
+                        "surface-container": "#1d2027",
+                        "tertiary-fixed": "#ffdcc6",
+                        "error-container": "#93000a",
+                        "on-secondary-fixed": "#002113",
+                        "on-secondary-container": "#00311f",
+                        "on-secondary": "#003824",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary-container": "#461f00",
+                        "on-tertiary": "#502400",
+                        "on-tertiary-fixed-variant": "#723600",
+                        "on-secondary-fixed-variant": "#005236",
+                        "surface-container-highest": "#32353c",
+                        "primary-fixed": "#d8e2ff",
+                        "primary-container": "#4d8eff",
+                        "on-primary": "#002e6a",
+                        "outline": "#8c909f",
+                        "surface-container-low": "#191b23",
+                        "surface-dim": "#10131a",
+                        "surface-container-lowest": "#0b0e15",
+                        "surface-tint": "#adc6ff",
+                        "secondary-container": "#00a572",
+                        "on-background": "#e1e2ec",
+                        "inverse-on-surface": "#2e3038",
+                        "surface-variant": "#32353c",
+                        "outline-variant": "#424754",
+                        "error": "#ffb4ab",
+                        "inverse-primary": "#005ac2",
+                        "tertiary-container": "#df7412",
+                        "background": "#10131a",
+                        "on-primary-fixed": "#001a42",
+                        "on-primary-fixed-variant": "#004395",
+                        "surface": "#10131a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "base": "8px",
+                        "sm": "8px",
+                        "xs": "4px",
+                        "xl": "32px",
+                        "container-margin": "24px",
+                        "lg": "24px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "title-sm": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "data-mono": ["JetBrains Mono"],
+                        "display-lg": ["Inter"],
+                        "label-caps": ["Inter"]
+                    },
+                    "fontSize": {
+                        "title-sm": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "data-mono": ["13px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="flex overflow-hidden">
+<!-- Sidebar (Shared Component Anchor) -->
+<aside class="w-[280px] h-screen sticky left-0 top-0 border-r border-outline-variant bg-surface-container dark:bg-surface-container flex flex-col h-full overflow-y-auto px-base py-md">
+<div class="flex items-center gap-md mb-xl px-base">
+<div class="w-10 h-10 bg-primary flex items-center justify-center rounded">
+<span class="material-symbols-outlined text-on-primary-container" style="font-variation-settings: 'FILL' 1;">insights</span>
+</div>
+<div>
+<h1 class="font-display-lg text-headline-md font-bold text-primary">OrderIQ</h1>
+<p class="font-body-md text-body-sm text-on-surface-variant">Procurement Intel</p>
+</div>
+</div>
+<nav class="flex-1 space-y-xs">
+<!-- Mapping JSON labels: PDF Review is Active -->
+<div class="group flex items-center px-md py-sm gap-md cursor-pointer hover:bg-surface-container-high transition-colors duration-200 text-on-surface-variant hover:text-on-surface">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</div>
+<div class="group flex items-center px-md py-sm gap-md cursor-pointer border-l-4 border-primary bg-surface-container-highest text-primary font-bold transition-transform translate-x-1">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">find_in_page</span>
+<span class="font-body-md text-body-md">PDF Review</span>
+</div>
+<div class="group flex items-center px-md py-sm gap-md cursor-pointer hover:bg-surface-container-high transition-colors duration-200 text-on-surface-variant hover:text-on-surface">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-body-md text-body-md">Order Intelligence</span>
+</div>
+<div class="group flex items-center px-md py-sm gap-md cursor-pointer hover:bg-surface-container-high transition-colors duration-200 text-on-surface-variant hover:text-on-surface">
+<span class="material-symbols-outlined">psychology</span>
+<span class="font-body-md text-body-md">AI Insights</span>
+</div>
+<div class="group flex items-center px-md py-sm gap-md cursor-pointer hover:bg-surface-container-high transition-colors duration-200 text-on-surface-variant hover:text-on-surface">
+<span class="material-symbols-outlined">notifications_active</span>
+<span class="font-body-md text-body-md">Alerts</span>
+</div>
+</nav>
+<div class="mt-auto border-t border-outline-variant pt-md px-base">
+<div class="flex items-center gap-md p-sm rounded hover:bg-surface-container-high transition-colors">
+<img class="w-10 h-10 rounded-full border border-outline" data-alt="A professional headshot of a senior financial analyst in a dark navy suit, studio lighting with a neutral gray background, sharp focus, professional demeanor." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPHr77Vjt5nrr8DrRwEdbNuXiePdBE1ao9UjJ2Umt64wZ1PRp_hzt0KY2jJ3iIcWblw-PnQ8hchIWK9k9semw7lJmVtM9wrQhWaSEDwWnFYTkhaZSKlgS3dHZkdylfWecVx8XqFCJ7CjErnvJt5xnebdwYDC0WKbPn2nNggt-rOmSeoOyNjW45ALg8dT_uBc8CkWyjIMvN9afF3kUriwn0UcavogM7sfIMrQKf03Je457dmFxFLmspXw"/>
+<div>
+<p class="font-body-md text-body-md font-bold">Admin User</p>
+<p class="font-body-sm text-xs text-on-surface-variant">System Intelligence</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col min-w-0">
+<!-- Top Navigation Bar -->
+<header class="flex justify-between items-center w-full px-lg h-16 bg-surface-container dark:bg-surface-container border-b border-outline-variant sticky top-0 z-50">
+<div class="flex items-center gap-lg">
+<div class="flex items-center gap-sm bg-surface-dim px-md py-xs rounded border border-outline-variant focus-within:ring-1 focus-within:ring-primary">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md w-64 text-on-surface" placeholder="Search announcements..." type="text"/>
+</div>
+<div class="flex items-center gap-md h-full">
+<span class="font-title-sm text-title-sm text-primary border-b-2 border-primary pb-1 cursor-pointer">Intelligence Workspace</span>
+<span class="font-title-sm text-title-sm text-on-surface-variant hover:text-primary transition-all cursor-pointer">History</span>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-xs px-md py-sm bg-secondary-container/10 border border-secondary text-secondary rounded text-body-sm font-bold">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+                    Parser Confidence: 99.4%
+                </div>
+<div class="h-8 w-[1px] bg-outline-variant mx-sm"></div>
+<button class="bg-surface-container-highest hover:bg-outline-variant px-md py-sm rounded text-body-sm font-bold flex items-center gap-xs transition-colors">
+<span class="material-symbols-outlined text-[18px]">notifications</span>
+</button>
+<button class="bg-primary text-on-primary-container px-md py-sm rounded text-body-sm font-bold flex items-center gap-xs hover:bg-primary-container transition-colors">
+<span class="material-symbols-outlined text-[18px]">ios_share</span>
+                    Export JSON
+                </button>
+</div>
+</header>
+<!-- Action Bar (Workflow Controls) -->
+<div class="px-lg py-md flex items-center justify-between bg-surface-container-low border-b border-outline-variant">
+<div class="flex items-center gap-md">
+<button class="px-md py-base bg-secondary text-on-secondary rounded font-bold flex items-center gap-xs hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-[20px]">check_circle</span>
+                    Verify
+                </button>
+<button class="px-md py-base border border-outline-variant text-on-surface rounded font-bold flex items-center gap-xs hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+                    Edit
+                </button>
+<button class="px-md py-base border border-outline-variant text-on-surface rounded font-bold flex items-center gap-xs hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[20px]">publish</span>
+                    Approve
+                </button>
+<button class="px-md py-base border border-outline-variant text-error rounded font-bold flex items-center gap-xs hover:bg-error-container/20 transition-colors">
+<span class="material-symbols-outlined text-[20px]">cancel</span>
+                    Reject
+                </button>
+</div>
+<div class="flex items-center gap-md">
+<button class="px-md py-base border border-outline-variant text-on-surface-variant rounded font-bold flex items-center gap-xs hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[20px]">refresh</span>
+                    Reprocess
+                </button>
+</div>
+</div>
+<!-- Three Panel Layout Container -->
+<div class="flex-1 flex overflow-hidden">
+<!-- Left Panel: PDF Viewer Shell (40%) -->
+<section class="w-[40%] flex flex-col border-r border-outline-variant bg-surface-dim">
+<!-- PDF Toolbar -->
+<div class="h-12 bg-surface-container-high flex items-center justify-between px-md">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined cursor-pointer hover:text-primary">grid_view</span>
+<div class="h-6 w-[1px] bg-outline-variant"></div>
+<div class="flex items-center gap-xs text-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">zoom_out</span>
+<span class="bg-surface-container px-base rounded border border-outline-variant">100%</span>
+<span class="material-symbols-outlined text-[18px]">zoom_in</span>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined cursor-pointer hover:text-primary">download</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-primary">print</span>
+</div>
+</div>
+<!-- PDF Canvas Area -->
+<div class="flex-1 overflow-y-auto p-lg flex justify-center bg-surface-container-lowest custom-scrollbar">
+<div class="w-full max-w-[595px] min-h-[842px] bg-white shadow-2xl p-[48px] relative">
+<!-- Simulated Letterhead -->
+<div class="flex justify-between items-start mb-xl border-b-[3px] border-[#0055a6] pb-md">
+<div class="text-[#0055a6] font-bold text-xl">LARSEN &amp; TOUBRO</div>
+<div class="text-xs text-right text-slate-500 leading-tight">
+                                L&amp;T House, Ballard Estate,<br/>P. O. Box 278, Mumbai 400 001<br/>Tel: +91 22 6752 5656
+                            </div>
+</div>
+<!-- PDF Content Simulation -->
+<div class="text-slate-900">
+<div class="mb-lg flex justify-between">
+<p class="text-xs font-bold">Ref: SEC/NSE/NHAI/2024/45</p>
+<p class="text-xs">October 14, 2024</p>
+</div>
+<h2 class="text-sm font-bold uppercase mb-md underline decoration-1 text-center">Subject: L&amp;T Construction Awarded Mega Contract for Eight-Lane Expressway Project</h2>
+<div class="space-y-md text-[13px] leading-relaxed text-justify">
+<p>Mumbai, October 14, 2024: The construction arm of Larsen &amp; Toubro has secured a 'Significant' order from the National Highways Authority of India (NHAI) for the development of an eight-lane access-controlled expressway in the state of Maharashtra.</p>
+<p>The project scope includes the construction of a 42km stretch from Section KM 124 to KM 166. The contract involves significant structural work including 4 major bridges, 12 minor bridges, and 2 interchanges. The total project value is estimated at <strong>₹2,150 Crore</strong>.</p>
+<p>The project is part of the Bharatmala Pariyojana Phase-I and is expected to be executed within a period of <strong>36 months</strong> using the EPC (Engineering, Procurement, and Construction) model.</p>
+<p>Commenting on this win, Mr. S.N. Subrahmanyan, CEO &amp; Managing Director, L&amp;T, said, "This award reinforces our leadership in the infrastructure space and our commitment to building the nation's critical transport corridors."</p>
+</div>
+<div class="mt-xl text-[11px] text-slate-500 italic">
+                                *This is a digitally signed document generated for disclosure purposes to NSE/BSE.
+                            </div>
+</div>
+<!-- Highlight Overlay (Simulating AI detection) -->
+<div class="absolute top-[315px] left-[345px] w-[95px] h-[22px] bg-primary/20 border border-primary/40 rounded-sm pointer-events-none"></div>
+<div class="absolute top-[375px] left-[330px] w-[75px] h-[22px] bg-primary/20 border border-primary/40 rounded-sm pointer-events-none"></div>
+</div>
+</div>
+</section>
+<!-- Middle Panel: Metadata & Extraction (35%) -->
+<section class="w-[35%] flex flex-col border-r border-outline-variant bg-surface-container p-lg custom-scrollbar overflow-y-auto">
+<div class="flex items-center justify-between mb-lg">
+<h3 class="font-headline-md text-title-sm text-on-surface">Extracted Metadata</h3>
+<div class="px-sm py-xs bg-primary/10 border border-primary text-primary text-[10px] uppercase font-bold rounded">Live Extraction</div>
+</div>
+<div class="space-y-md">
+<!-- Entity Info -->
+<div class="p-md rounded-lg border border-outline-variant bg-surface-container-high space-y-md">
+<div class="grid grid-cols-2 gap-md">
+<div>
+<label class="font-label-caps text-label-caps text-on-surface-variant block mb-xs">Company</label>
+<p class="font-body-md text-body-md font-bold text-on-surface">Larsen &amp; Toubro</p>
+</div>
+<div>
+<label class="font-label-caps text-label-caps text-on-surface-variant block mb-xs">Symbol</label>
+<p class="font-data-mono text-data-mono text-secondary px-sm py-[2px] bg-secondary/10 border border-secondary/20 rounded inline-block">LT:IN</p>
+</div>
+</div>
+<div class="h-[1px] bg-outline-variant/30"></div>
+<div>
+<label class="font-label-caps text-label-caps text-on-surface-variant block mb-xs">Awarding Authority</label>
+<p class="font-body-md text-body-md font-bold text-on-surface">NHAI (National Highways Authority of India)</p>
+</div>
+</div>
+<!-- Financial & Timeline Info -->
+<div class="p-md rounded-lg border border-outline-variant bg-surface-container-high space-y-md">
+<div class="grid grid-cols-2 gap-md">
+<div>
+<label class="font-label-caps text-label-caps text-on-surface-variant block mb-xs">Order Value</label>
+<p class="font-display-lg text-title-sm text-primary">₹2,150 Crore</p>
+</div>
+<div>
+<label class="font-label-caps text-label-caps text-on-surface-variant block mb-xs">Execution Period</label>
+<p class="font-body-md text-body-md font-bold text-on-surface">36 Months</p>
+</div>
+</div>
+<div class="h-[1px] bg-outline-variant/30"></div>
+<div>
+<label class="font-label-caps text-label-caps text-on-surface-variant block mb-xs">Classification</label>
+<span class="px-sm py-[2px] bg-tertiary-container text-on-tertiary-container rounded text-xs font-bold">Mega Project</span>
+</div>
+</div>
+<!-- Project Details -->
+<div class="p-md rounded-lg border border-outline-variant bg-surface-container-high">
+<label class="font-label-caps text-label-caps text-on-surface-variant block mb-xs">Project Description</label>
+<p class="font-body-md text-body-md text-on-surface leading-relaxed">
+                            Construction of an eight-lane access-controlled expressway in Maharashtra. 42km stretch including 4 major bridges, 12 minor bridges, and 2 interchanges under Bharatmala Pariyojana.
+                        </p>
+</div>
+<!-- Contextual Map / Location -->
+<div class="rounded-lg border border-outline-variant overflow-hidden h-40 relative">
+<div class="absolute inset-0 bg-surface-container-highest" data-alt="A detailed satellite view map showing a highway construction route through a lush landscape in Maharashtra, India. The map should have architectural UI overlays with coordinate markers and a thin blue line representing the planned expressway route. High tech, professional GIS interface style." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBLj6Ncl2-1jwSTMqTrsGT11RekIodCJXubF1Z8hujf9ufgB5tEo3g679RM4XxqSKdNjCqAu6jLAi2fSrL92llhYDMT6L-rHkUzIj8UiYJQIaSZYgQe3o4Ua78-gvLKGk8PDpYh-O2IKFhWedY4hx4zI6s-NNT-vK3dwPLeFcSUo_y9z_kUdUWunlh5u-d6Pvnj03gQap9FsYUIMdSjz6Rg0qbEr9GaUkd9Yc3R-OcrP-16j8_EjfcahQ')"></div>
+<div class="absolute top-2 left-2 bg-surface-dim/80 backdrop-blur-md px-sm py-xs rounded border border-outline-variant text-[10px] font-bold">
+                            LOCATION: MAHARASHTRA, INDIA
+                        </div>
+</div>
+</div>
+</section>
+<!-- Right Panel: AI Insights & Implications (25%) -->
+<section class="w-[25%] flex flex-col bg-surface-container-low p-lg custom-scrollbar overflow-y-auto">
+<div class="flex items-center gap-sm mb-lg">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">psychology</span>
+<h3 class="font-headline-md text-title-sm text-on-surface">AI Insights</h3>
+</div>
+<div class="space-y-xl">
+<!-- AI Summary -->
+<div>
+<h4 class="font-label-caps text-label-caps text-primary mb-sm">STRATEGIC SUMMARY</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed italic">
+                            "The contract aligns with L&amp;T’s strategic focus on the transport infrastructure segment. High complexity work (interchanges/bridges) typically yields superior margins compared to standard asphalt work."
+                        </p>
+</div>
+<!-- Revenue Impact Card -->
+<div class="bg-gradient-to-br from-primary/10 to-transparent p-md rounded-lg border border-primary/20">
+<h4 class="font-label-caps text-label-caps text-primary mb-md">REVENUE IMPACT</h4>
+<div class="flex items-end gap-sm mb-xs">
+<span class="font-display-lg text-display-lg text-primary">+4.2%</span>
+<span class="font-body-sm text-xs text-on-surface-variant pb-base">segment revenue</span>
+</div>
+<div class="w-full bg-surface-container h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[42%]"></div>
+</div>
+</div>
+<!-- Market Significance -->
+<div class="flex items-center justify-between p-md bg-surface-container-high rounded border border-outline-variant">
+<div>
+<h4 class="font-label-caps text-label-caps text-on-surface-variant">Market Significance</h4>
+<p class="font-body-md text-body-md font-bold text-on-surface">High Impact</p>
+</div>
+<span class="material-symbols-outlined text-secondary text-[32px]" style="font-variation-settings: 'FILL' 1;">trending_up</span>
+</div>
+<!-- Identified Risks -->
+<div class="space-y-md">
+<h4 class="font-label-caps text-label-caps text-error">IDENTIFIED RISKS</h4>
+<ul class="space-y-sm">
+<li class="flex gap-sm p-sm bg-error-container/10 border-l-2 border-error">
+<span class="material-symbols-outlined text-error text-[18px]">report_problem</span>
+<div>
+<p class="text-body-sm font-bold text-on-surface">Execution Timeline</p>
+<p class="text-[11px] text-on-surface-variant">36 month window is tight for high-structure volume.</p>
+</div>
+</li>
+<li class="flex gap-sm p-sm bg-surface-container-high border-l-2 border-outline">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">info</span>
+<div>
+<p class="text-body-sm font-bold text-on-surface">Material Inflation</p>
+<p class="text-[11px] text-on-surface-variant">Potential impact of steel/cement pricing over 3 years.</p>
+</div>
+</li>
+</ul>
+</div>
+<!-- Related Announcements -->
+<div class="pt-lg border-t border-outline-variant">
+<h4 class="font-label-caps text-label-caps text-on-surface-variant mb-md">SIMILAR PRECEDENTS</h4>
+<div class="space-y-sm">
+<div class="p-sm hover:bg-surface-container-high rounded cursor-pointer transition-colors group">
+<p class="text-xs font-bold text-on-surface group-hover:text-primary">L&amp;T NHAI Package-4 Win</p>
+<p class="text-[10px] text-on-surface-variant">Mar 2024 • ₹1,890 Cr</p>
+</div>
+<div class="p-sm hover:bg-surface-container-high rounded cursor-pointer transition-colors group">
+<p class="text-xs font-bold text-on-surface group-hover:text-primary">IRB Infra Maharashtra Express</p>
+<p class="text-[10px] text-on-surface-variant">Jan 2024 • ₹2,340 Cr</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Floating Toast Notification (Interactive Element) -->
+<div class="fixed bottom-lg right-lg bg-surface-container-highest border border-primary text-on-surface px-lg py-md rounded-xl shadow-2xl translate-y-24 opacity-0 transition-all duration-500 z-[100] flex items-center gap-md" id="toast">
+<span class="material-symbols-outlined text-primary">auto_awesome</span>
+<span class="text-body-md font-bold">Metadata Cross-Referenced Successfully</span>
+</div>
+<script>
+        // Simple Micro-interactions
+        document.addEventListener('DOMContentLoaded', () => {
+            // Show a toast after a delay to simulate intelligence processing
+            setTimeout(() => {
+                const toast = document.getElementById('toast');
+                toast.classList.remove('translate-y-24', 'opacity-0');
+                
+                setTimeout(() => {
+                    toast.classList.add('translate-y-24', 'opacity-0');
+                }, 4000);
+            }, 1500);
+
+            // Simulate PDF Highlight toggle
+            const zoomIn = document.querySelector('[data-icon="zoom_in"]');
+            if(zoomIn) {
+                zoomIn.addEventListener('click', () => {
+                   alert('PDF Zoom simulated. Focus on Metadata Panel for exact values.');
+                });
+            }
+        });
+    </script>
+</body></html>

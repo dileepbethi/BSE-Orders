@@ -74,8 +74,12 @@ def open_bse(from_date, to_date):
             to_date
         )
 
-        records = get_result_rows(page)
+        print("[INFO] Waiting for results table to refresh...")
 
+        page.wait_for_timeout(3000)
+
+        records = get_result_rows(page)
+        
         print(f"\n[SUCCESS] Records Found : {len(records)}\n")
 
         if len(records) == 0:
@@ -138,7 +142,7 @@ def open_bse(from_date, to_date):
             print(f"Failed        : {failed}")
             print("=" * 80)
 
-        input("\nPress Enter to close browser...")
+        #input("\nPress Enter to close browser...")
 
         context.close()
         browser.close()

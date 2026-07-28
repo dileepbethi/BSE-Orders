@@ -54,6 +54,8 @@ class OrderValueExtractor:
                 return self.clean(
                     match.group(1)
                 )
+        return ""
+            
     def convert_to_crore(self, value: str):
 
         if not value:

@@ -1,9 +1,16 @@
 """
 Date Extractor
-Version: 1.0
+Version: 2.0
+
+Responsibilities
+
+- Extract announcement date
+- Normalize date
+- Always return YYYY-MM-DD
 """
 
 import re
+from datetime import datetime
 
 
 class DateExtractor:
@@ -11,11 +18,63 @@ class DateExtractor:
     def __init__(self):
         pass
 
+    # =====================================================
+    # CLEAN
+    # =====================================================
+
     def clean(self, value: str) -> str:
 
         value = re.sub(r"\s+", " ", value)
 
         return value.strip()
+
+    # =====================================================
+    # NORMALIZE
+    # =====================================================
+
+    def normalize(self, value: str) -> str:
+
+        value = self.clean(value)
+
+        value = re.sub(
+            r"(\d+)(st|nd|rd|th)",
+            r"\1",
+            value,
+            flags=re.IGNORECASE
+        )
+
+        formats = [
+
+            "%d.%m.%Y",
+
+            "%d %B, %Y",
+
+            "%d %B %Y",
+
+            "%B %d, %Y",
+
+            "%b %d, %Y",
+
+        ]
+
+        for fmt in formats:
+
+            try:
+
+                return datetime.strptime(
+                    value,
+                    fmt
+                ).strftime("%Y-%m-%d")
+
+            except ValueError:
+
+                pass
+
+        return value
+
+    # =====================================================
+    # EXTRACT
+    # =====================================================
 
     def extract(self, text: str) -> str:
 
@@ -39,7 +98,7 @@ class DateExtractor:
 
             if match:
 
-                return self.clean(
+                return self.normalize(
                     match.group(1)
                 )
 
