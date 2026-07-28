@@ -85,22 +85,22 @@ class CompanyExtractor:
     def is_valid_company(self, company: str) -> bool:
 
         if not company:
-
             return False
 
         company = self.clean_company(company)
 
         if len(company) < 4:
-
             return False
+
+        company_lower = company.lower()
 
         for invalid in self.INVALID_COMPANIES:
 
-            if company == invalid:
-
+            if invalid.lower() in company_lower:
                 return False
 
         return True
+    
     # =====================================================
     # HEADER STRATEGY
     # =====================================================
@@ -214,6 +214,9 @@ class CompanyExtractor:
                 match.group(1)
             )
 
+            print("HEADER COMPANY:", repr(company))
+            print("VALID:", self.is_valid_company(company))
+            
             if self.is_valid_company(company):
 
                 return company

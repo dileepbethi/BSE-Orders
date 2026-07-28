@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from scripts.company_extractor_v2 import CompanyExtractor
+from scripts.company_extractor import CompanyExtractor
 
 e = CompanyExtractor()
 
