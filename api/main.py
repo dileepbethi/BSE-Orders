@@ -1,118 +1,264 @@
+"""
+OrderIQ API
+
+Sprint 6
+Version: 2.0
+"""
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from scripts.database_manager import DatabaseManager
+from database.search_engine import SearchEngine
 
 
 app = FastAPI(
-    title="BSE Orders API",
-    description="API for BSE Corporate Orders Dashboard",
-    version="1.1.0"
+    title="OrderIQ API",
+    description="Corporate Order Intelligence Platform API",
+    version="2.0.0"
 )
 
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 
+# ==========================================================
+# ROOT
+# ==========================================================
+
 @app.get("/")
 def home():
 
     return {
-        "message": "Welcome to BSE Orders API",
+        "application": "OrderIQ",
+        "version": "2.0.0",
         "status": "running"
     }
 
 
-@app.get("/orders")
-def get_orders():
+# ==========================================================
+# HEALTH
+# ==========================================================
 
-    db = DatabaseManager()
+@app.get("/health")
+def health():
 
-    rows = db.get_all()
-
-    db.close()
-
-    orders = []
-
-    for row in rows:
-
-        orders.append({
-            "id": row[0],
-            "company": row[1],
-            "announcement_date": row[2],
-            "awarding_entity": row[3],
-            "order_value": row[4],
-            "execution_period": row[5],
-            "order_type": row[6],
-            "domestic": row[7],
-            "project_description": row[8],
-            "source_file": row[9],
-            "created_at": row[10]
-        })
-
-    return orders
-
-
-@app.get("/dashboard/stats")
-def dashboard_stats():
-
-    db = DatabaseManager()
-
-    stats = {
-        "total_orders": db.get_total_orders(),
-        "total_companies": db.get_total_companies(),
-        "domestic_orders": db.get_domestic_orders(),
-        "international_orders": db.get_international_orders()
+    return {
+        "status": "healthy"
     }
 
-    db.close()
 
-    return stats
+# ==========================================================
+# DATABASE STATS
+# ==========================================================
+
+@app.get("/stats")
+def stats():
+
+    search = SearchEngine()
+
+    data = {
+
+        "total_records": search.get_total_records(),
+
+        "total_companies": search.get_total_companies(),
+
+        "total_customers": search.get_total_customers(),
+
+        "total_orders": search.get_total_orders()
+
+    }
+
+    search.close()
+
+    return data
 
 
-@app.get("/dashboard/latest-orders")
-def latest_orders():
+# ==========================================================
+# SEARCH COMPANY
+# ==========================================================
 
-    db = DatabaseManager()
+@app.get("/search/company/{company}")
+def search_company(company: str):
 
-    rows = db.latest(10)
+    search = SearchEngine()
 
-    db.close()
+    rows = search.search_company(company)
 
-    orders = []
+    search.close()
+
+    results = []
 
     for row in rows:
 
-        orders.append({
+        results.append({
+
             "id": row[0],
+
             "company": row[1],
-            "announcement_date": row[2],
-            "awarding_entity": row[3],
-            "order_value": row[4],
-            "execution_period": row[5],
-            "order_type": row[6],
-            "domestic": row[7],
-            "project_description": row[8],
-            "source_file": row[9],
+
+            "customer": row[2],
+
+            "announcement_date": row[3],
+
+            "announcement_type": row[4],
+
+            "order_value": row[5],
+
+            "source_file": row[6],
+
+            "exchange": row[7],
+
+            "confidence_score": row[8],
+
+            "processing_status": row[9],
+
             "created_at": row[10]
+
         })
 
-    return orders
+    return results
 
 
-@app.get("/dashboard/monthly-orders")
-def monthly_orders():
+# ==========================================================
+# SEARCH CUSTOMER
+# ==========================================================
 
-    db = DatabaseManager()
+@app.get("/search/customer/{customer}")
+def search_customer(customer: str):
 
-    data = db.get_monthly_orders()
+    search = SearchEngine()
 
-    db.close()
+    rows = search.search_customer(customer)
 
-    return data
+    search.close()
+
+    results = []
+
+    for row in rows:
+
+        results.append({
+
+            "id": row[0],
+
+            "company": row[1],
+
+            "customer": row[2],
+
+            "announcement_date": row[3],
+
+            "announcement_type": row[4],
+
+            "order_value": row[5],
+
+            "source_file": row[6],
+
+            "exchange": row[7],
+
+            "confidence_score": row[8],
+
+            "processing_status": row[9],
+
+            "created_at": row[10]
+
+        })
+
+    return results
+
+
+# ==========================================================
+# SEARCH DATE
+# ==========================================================
+
+@app.get("/search/date/{date}")
+def search_date(date: str):
+
+    search = SearchEngine()
+
+    rows = search.search_date(date)
+
+    search.close()
+
+    results = []
+
+    for row in rows:
+
+        results.append({
+
+            "id": row[0],
+
+            "company": row[1],
+
+            "customer": row[2],
+
+            "announcement_date": row[3],
+
+            "announcement_type": row[4],
+
+            "order_value": row[5],
+
+            "source_file": row[6],
+
+            "exchange": row[7],
+
+            "confidence_score": row[8],
+
+            "processing_status": row[9],
+
+            "created_at": row[10]
+
+        })
+
+    return results
+# ==========================================================
+# ALL ORDERS
+# ==========================================================
+
+@app.get("/orders")
+def get_orders(
+    page: int = 1,
+    limit: int = 20
+):
+
+    search = SearchEngine()
+
+    rows = search.get_all_orders()
+
+    search.close()
+
+    results = []
+
+    for row in rows:
+
+        results.append({
+
+            "id": row[0],
+
+            "company": row[1],
+
+            "customer": row[2],
+
+            "announcement_date": row[3],
+
+            "announcement_type": row[4],
+
+            "order_value": row[5],
+
+            "source_file": row[6],
+
+            "exchange": row[7],
+
+            "confidence_score": row[8],
+
+            "processing_status": row[9],
+
+            "created_at": row[10]
+
+        })
+
+    return results
