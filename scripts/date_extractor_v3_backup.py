@@ -102,8 +102,6 @@ class DateExtractor:
 
     def extract(self, text: str) -> str:
 
-        header = "\n".join(text.splitlines()[:50])
-
         patterns = [
 
             # Date: 24/07/2026
@@ -118,15 +116,19 @@ class DateExtractor:
             # Date: 20th July 2026
             r"Date\s*[:=\-]?\s*(\d{1,2}(?:st|nd|rd|th)?\s+[A-Za-z]+\s*,?\s*\d{4})",
 
-            # Standalone date
+            # Standalone: 20th July 2026
             r"(\d{1,2}(?:st|nd|rd|th)?\s+[A-Za-z]+\s*,?\s*\d{4})",
 
+            # July 20, 2026
             r"([A-Za-z]+\s+\d{1,2},\s*\d{4})",
 
+            # 09/07/2026 anywhere
             r"(\d{1,2}/\d{1,2}/\d{4})",
 
+            # 09-07-2026 anywhere
             r"(\d{1,2}-\d{1,2}-\d{4})",
 
+            # 09.07.2026 anywhere
             r"(\d{1,2}\.\d{1,2}\.\d{4})",
 
         ]
@@ -135,28 +137,14 @@ class DateExtractor:
 
             match = re.search(
                 pattern,
-                header,
+                text,
                 re.IGNORECASE
             )
 
             if match:
 
-                value = match.group(1)
-
-                upper = value.upper()
-
-                blocked = [
-                    "PLC",
-                    "ISO",
-                    "REGULATION",
-                    "YEARS",
-                    "SECTION",
-                    "ACT",
-                ]
-
-                if any(word in upper for word in blocked):
-                    continue
-
-                return self.normalize(value)
+                return self.normalize(
+                    match.group(1)
+                )
 
         return ""

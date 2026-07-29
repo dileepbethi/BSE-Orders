@@ -1,11 +1,9 @@
 """
 OrderIQ Pipeline
 
-Sprint 3
-Version: 2.0
+Sprint 2
+Version: 1.0
 """
-
-from pathlib import Path
 
 from scripts.company_extractor import CompanyExtractor
 from scripts.customer_extractor import CustomerExtractor
@@ -13,12 +11,11 @@ from scripts.date_extractor import DateExtractor
 from scripts.order_value_extractor_v2 import OrderValueExtractor
 from scripts.announcement_classifier import AnnouncementClassifier
 from scripts.record_validator import RecordValidator
-from database.database_manager import DatabaseManager
 
 
 class OrderIQPipeline:
 
-    def __init__(self, auto_save: bool = False):
+    def __init__(self):
 
         self.company_extractor = CompanyExtractor()
 
@@ -31,15 +28,6 @@ class OrderIQPipeline:
         self.classifier = AnnouncementClassifier()
 
         self.validator = RecordValidator()
-
-        self.auto_save = auto_save
-
-        if self.auto_save:
-
-            self.db = DatabaseManager()
-
-            self.db.create_tables()
-
     def process(self, text: str, source_file: str = "") -> dict:
 
         record = {
@@ -56,12 +44,6 @@ class OrderIQPipeline:
 
             "source_file": source_file,
 
-            "exchange": "BSE",
-
-            "confidence_score": 1.0,
-
-            "processing_status": "SUCCESS",
-
         }
 
         validation = self.validator.validate(record)
@@ -70,13 +52,10 @@ class OrderIQPipeline:
 
         record["errors"] = validation["errors"]
 
-        if self.auto_save and record["valid"]:
-
-            self.db.insert_record(record)
-
         return record
-
     def process_file(self, file_path: str) -> dict:
+
+        from pathlib import Path
 
         path = Path(file_path)
 
@@ -89,8 +68,9 @@ class OrderIQPipeline:
             text=text,
             source_file=path.name
         )
-
     def process_directory(self, folder_path: str) -> list:
+
+        from pathlib import Path
 
         records = []
 
@@ -109,9 +89,3 @@ class OrderIQPipeline:
                 print(f"Error processing {file.name}: {e}")
 
         return records
-
-    def close(self):
-
-        if self.auto_save:
-
-            self.db.close()
