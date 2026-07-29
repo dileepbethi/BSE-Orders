@@ -88,6 +88,28 @@ class SearchEngine:
 
         return self.cursor.fetchall()
 
+        # =====================================================
+    # GLOBAL SEARCH
+    # =====================================================
+
+    def search(self, query: str):
+
+        self.cursor.execute(
+            """
+            SELECT *
+            FROM announcements
+            WHERE company LIKE ?
+               OR customer LIKE ?
+            ORDER BY announcement_date DESC
+            """,
+            (
+                f"%{query}%",
+                f"%{query}%"
+            )
+        )
+
+        return self.cursor.fetchall()
+
     # =====================================================
     # CLOSE
     # =====================================================

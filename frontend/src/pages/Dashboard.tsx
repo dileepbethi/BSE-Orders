@@ -4,30 +4,21 @@ import PageHeader from "../components/common/PageHeader";
 import KPICard from "../components/dashboard/KPICard";
 import ChartCard from "../components/dashboard/ChartCard";
 import PieChartCard from "../components/dashboard/PieChartCard";
+import OrdersTable from "../components/dashboard/OrdersTable";
 
-import { api } from "../services/api";
-
-type DashboardStats = {
-  total_orders: number;
-  total_companies: number;
-  domestic_orders: number;
-  international_orders: number;
-};
-
+import { getDashboardStats } from "../services/dashboardService";
+import type { DashboardStats } from "../services/dashboardService";
 function Dashboard() {
   const [stats, setStats] = useState<DashboardStats>({
-    total_orders: 0,
+    total_records: 0,
     total_companies: 0,
-    domestic_orders: 0,
-    international_orders: 0,
+    total_customers: 0,
+    total_orders: 0,
   });
 
   useEffect(() => {
-    api
-      .get("/dashboard/stats")
-      .then((response) => {
-        setStats(response.data);
-      })
+    getDashboardStats()
+      .then(setStats)
       .catch((error) => {
         console.error("Dashboard API Error:", error);
       });
@@ -44,25 +35,25 @@ function Dashboard() {
         <KPICard
           title="Total Orders"
           value={stats.total_orders.toString()}
-          footer="Orders available in database"
+          footer="Orders detected"
         />
 
         <KPICard
           title="Total Companies"
           value={stats.total_companies.toString()}
-          footer="Unique listed companies"
+          footer="Unique companies"
         />
 
         <KPICard
-          title="Domestic Orders"
-          value={stats.domestic_orders.toString()}
-          footer="Domestic contracts"
+          title="Total Records"
+          value={stats.total_records.toString()}
+          footer="Announcements processed"
         />
 
         <KPICard
-          title="International Orders"
-          value={stats.international_orders.toString()}
-          footer="International contracts"
+          title="Total Customers"
+          value={stats.total_customers.toString()}
+          footer="Unique customers"
         />
       </div>
 
@@ -70,14 +61,18 @@ function Dashboard() {
         <div className="lg:col-span-2">
           <ChartCard
             title="Monthly Order Trend"
-            subtitle="Aggregate value of contract announcements"
+            subtitle="Coming in next step"
           />
         </div>
 
         <PieChartCard
-          title="Sector Distribution"
-          subtitle="Orders by sector"
+          title="Order Distribution"
+          subtitle="Coming in next step"
         />
+      </div>
+
+      <div className="mt-8">
+        <OrdersTable />
       </div>
     </>
   );

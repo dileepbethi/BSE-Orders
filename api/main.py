@@ -10,7 +10,6 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from database.search_engine import SearchEngine
 
-
 app = FastAPI(
     title="OrderIQ API",
     description="Corporate Order Intelligence Platform API",
@@ -262,3 +261,33 @@ def get_orders(
         })
 
     return results
+@app.get("/search")
+def search_orders(query: str):
+
+    search = SearchEngine()
+
+    rows = search.search(query)
+
+    search.close()
+
+    orders = []
+
+    for row in rows:
+
+        orders.append({
+
+            "id": row[0],
+            "company": row[1],
+            "customer": row[2],
+            "announcement_date": row[3],
+            "announcement_type": row[4],
+            "order_value": row[5],
+            "source_file": row[6],
+            "exchange": row[7],
+            "confidence_score": row[8],
+            "processing_status": row[9],
+            "created_at": row[10]
+
+        })
+
+    return orders
