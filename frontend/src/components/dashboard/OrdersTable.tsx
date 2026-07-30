@@ -13,41 +13,37 @@ import type { Order } from "../../services/ordersService";
 function OrdersTable() {
 
   const [orders, setOrders] = useState<Order[]>([]);
-    const [search, setSearch] = useState("");
-    const navigate = useNavigate();
+  const [search, setSearch] = useState("");
 
+  const navigate = useNavigate();
 
   useEffect(() => {
 
-    console.log("Current search:", search);
+    async function load() {
 
-    if (search.trim() === "") {
+      try {
 
-      console.log("Loading latest orders...");
+        if (search.trim() === "") {
 
-      getOrders(1, 10)
-        .then((data) => {
-          console.log("Latest Orders:", data);
+          const data = await getOrders(1, 10);
           setOrders(data);
-        })
-        .catch((error) => {
-          console.error("Orders API Error:", error);
-        });
 
-    } else {
+        } else {
 
-      console.log("Searching:", search);
-
-      searchOrders(search)
-        .then((data) => {
-          console.log("Search Results:", data);
+          const data = await searchOrders(search);
           setOrders(data);
-        })
-        .catch((error) => {
-          console.error("Search API Error:", error);
-        });
+
+        }
+
+      } catch (error) {
+
+        console.error(error);
+
+      }
 
     }
+
+    load();
 
   }, [search]);
 
@@ -65,10 +61,7 @@ function OrdersTable() {
           type="text"
           placeholder="Search company or customer..."
           value={search}
-          onChange={(e) => {
-            console.log("Typed:", e.target.value);
-            setSearch(e.target.value);
-          }}
+          onChange={(e) => setSearch(e.target.value)}
           className="w-72 rounded-lg border border-slate-700 bg-slate-800 px-4 py-2 text-white outline-none"
         />
 
@@ -110,7 +103,7 @@ function OrdersTable() {
                 key={order.id}
                 onClick={() => navigate(`/order/${order.id}`)}
                 className="cursor-pointer border-b border-slate-800 transition hover:bg-slate-800"
-              type database\database_manager.py>
+              >
 
                 <td className="p-3">
                   {order.company}

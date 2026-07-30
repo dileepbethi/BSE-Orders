@@ -15,21 +15,41 @@ function OrderDetailsPage() {
 
   const { id } = useParams();
 
-  const [order, setOrder] = useState<OrderDetails | null>(null);
+  const [order, setOrder] =
+    useState<OrderDetails | null>(null);
+
+  const [loading, setLoading] =
+    useState(true);
 
   useEffect(() => {
 
     if (!id) return;
 
-    getOrderDetails(Number(id))
-      .then(setOrder)
-      .catch((error) => {
-        console.error("Order Details API Error:", error);
-      });
+    async function loadOrder() {
+
+      try {
+
+        const data = await getOrderDetails(Number(id));
+
+        setOrder(data);
+
+      } catch (error) {
+
+        console.error(error);
+
+      } finally {
+
+        setLoading(false);
+
+      }
+
+    }
+
+    loadOrder();
 
   }, [id]);
 
-  if (!order) {
+  if (loading) {
 
     return (
       <>
@@ -46,105 +66,92 @@ function OrderDetailsPage() {
 
   }
 
-  return (
+  if (!order) {
 
-    <>
-      <PageHeader
-        title="Order Details"
-        subtitle="Corporate Announcement"
-      />
+    return (
+      <>
+        <PageHeader
+          title="Order Details"
+          subtitle="Not Found"
+        />
 
-      <div className="rounded-xl border border-slate-700 bg-slate-900 p-8">
+        <p className="text-red-400">
+          Order not found.
+        </p>
+      </>
+    );
 
-        <div className="grid grid-cols-2 gap-6">
+  }
 
-          <div>
-            <p className="text-sm text-slate-400">
-              Company
-            </p>
+return (
 
-            <h2 className="mt-1 text-xl font-semibold text-white">
-              {order.company}
-            </h2>
-          </div>
+  <>
 
-          <div>
-            <p className="text-sm text-slate-400">
-              Customer
-            </p>
+    <PageHeader
+      title="Order Details"
+      subtitle="Corporate Announcement"
+    />
 
-            <h2 className="mt-1 text-xl font-semibold text-white">
-              {order.customer || "-"}
-            </h2>
-          </div>
+    <div className="mb-6 flex justify-end">
 
-          <div>
-            <p className="text-sm text-slate-400">
-              Announcement Date
-            </p>
+      <button
+        className="rounded-lg bg-blue-600 px-5 py-2 font-medium text-white hover:bg-blue-700"
+      >
+        Edit
+      </button>
 
-            <h2 className="mt-1 text-xl font-semibold text-white">
-              {order.announcement_date}
-            </h2>
-          </div>
+    </div>
 
-          <div>
-            <p className="text-sm text-slate-400">
-              Order Value
-            </p>
+    <div className="rounded-xl border border-slate-700 bg-slate-900 p-8">
 
-            <h2 className="mt-1 text-xl font-semibold text-green-400">
-              {order.order_value || "-"}
-            </h2>
-          </div>
+      <div className="grid grid-cols-2 gap-6">
 
-          <div>
-            <p className="text-sm text-slate-400">
-              Exchange
-            </p>
+  <div>
+    <p className="text-sm text-slate-400">
+      Company
+    </p>
 
-            <h2 className="mt-1 text-xl font-semibold text-white">
-              {order.exchange}
-            </h2>
-          </div>
+    <h2 className="mt-1 text-xl font-semibold text-white">
+      {order.company}
+    </h2>
+  </div>
 
-          <div>
-            <p className="text-sm text-slate-400">
-              Processing Status
-            </p>
+  <div>
+    <p className="text-sm text-slate-400">
+      Customer
+    </p>
 
-            <h2 className="mt-1 text-xl font-semibold text-emerald-400">
-              {order.processing_status}
-            </h2>
-          </div>
+    <h2 className="mt-1 text-xl font-semibold text-white">
+      {order.customer || "-"}
+    </h2>
+  </div>
 
-          <div>
-            <p className="text-sm text-slate-400">
-              Confidence Score
-            </p>
+  <div>
+    <p className="text-sm text-slate-400">
+      Announcement Date
+    </p>
 
-            <h2 className="mt-1 text-xl font-semibold text-white">
-              {order.confidence_score}
-            </h2>
-          </div>
+    <h2 className="mt-1 text-xl font-semibold text-white">
+      {order.announcement_date}
+    </h2>
+  </div>
 
-          <div>
-            <p className="text-sm text-slate-400">
-              Source File
-            </p>
+  <div>
+    <p className="text-sm text-slate-400">
+      Order Value
+    </p>
 
-            <h2 className="mt-1 break-all text-sm text-white">
-              {order.source_file}
-            </h2>
-          </div>
+    <h2 className="mt-1 text-xl font-semibold text-green-400">
+      {order.order_value || "-"}
+    </h2>
+  </div>
 
-        </div>
+</div>
+    </div>
 
-      </div>
+  </>
 
-    </>
-
-  );
+);
 
 }
 
