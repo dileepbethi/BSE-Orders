@@ -4,6 +4,7 @@ Version: 5.0
 Supports multi-line field extraction
 """
 
+from dataclasses import fields
 import re
 
 
@@ -165,45 +166,60 @@ class FieldParser:
 
             if current_field:
 
-                # New numbered field like:
-                # 7.
-                # 8.
-                # 9.
-
+                # Next numbered field
                 if re.match(r"^\d+\.", line):
-
                     current_field = None
                     continue
-
-                # Number followed by space
 
                 if re.match(r"^\d+\s", line):
-
                     current_field = None
                     continue
 
-                # Lettered bullets
-
+                # Bullet
                 if re.match(r"^[A-Za-z]\)", line):
-
                     current_field = None
                     continue
 
-                # Common SEBI next-field headers
+                # Known SEBI field headers
+                stop_headers = [
+                    "name of the entity",
+                    "significant terms",
+                    "whether domestic",
+                    "nature of order",
+                    "time period",
+                    "broad consideration",
+                    "whether the promoter",
+                    "whether the order",
+                    "nature of interest",
+                    "additional disclosure",
+                    "brief details",
+                    "name of parties"
+                ]
 
-                if (
-                    "whether the promoter" in lower
-                    or "whether the order" in lower
-                    or "nature of interest" in lower
-                    or "additional disclosure" in lower
-                ):
+                if any(header in lower for header in stop_headers):
+                    current_field = None
+                    continue
 
+                # Company footer
+                footer_headers = [
+                    "registered office",
+                    "corp. office",
+                    "website",
+                    "email",
+                    "cin",
+                    "telephone",
+                    "tel:",
+                    "fax",
+                    "www."
+                ]
+
+                if any(footer in lower for footer in footer_headers):
                     current_field = None
                     continue
 
                 fields[current_field] += " " + line
-                fields[current_field] = self.clean(fields[current_field])
-
-                
+                fields[current_field] = self.clean(
+                    fields[current_field]
+                )
 
         return fields
