@@ -1,12 +1,17 @@
 {
     "company": "Raunaq lnternational Limited",
-    "announcement_date": "July 07, 2026",
+    "announcement_type": "ORDER",
+    "announcement_date": "2026-07-07",
     "awarding_entity": "orde(s) Ambuia Cements Limited",
     "order_value": "Aggregate order value amounting orde(s) to Rs. 18.10 Crores (",
     "order_value_crore": 18.1,
     "execution_period": "",
     "order_type": "",
     "domestic": "",
-    "project_description": "As per Annexure-1 orde(s) awarded J. Whether orde(s) have been awarded by Domestic Entity Domestic/l nternational entity Nature of orde(s) Order no. 1 Supply, Erection, Testing and Commissioning of Raw Water Pipeline and associated Equipment - ACL Maratha Order no. 2 Erection, Testing and of Commissioning Raw Water Pipeline and associated Equipment - ACL Maratha Whether Domestic or lnternational Domestic",
-    "source_file": "beb19174-b6d2-4588-85f9-1bc0a4e8196c.txt"
+    "project_description": "As per Annexure-1 orde(s) awarded J. Whether orde(s) have been awarded by Domestic Entity Domestic/l nternational entity Nature of orde(s) Order no. 1 Supply, Erection, Testing and Commissioning of Raw Water Pipeline and associated Equipment - ACL Maratha Order no. 2 Erection, Testing and of Commissioning Raw Water Pipeline and associated Equipment - ACL Maratha",
+    "source_file": "beb19174-b6d2-4588-85f9-1bc0a4e8196c.txt",
+    "customer": "",
+    "exchange": "BSE",
+    "confidence_score": 1.0,
+    "processing_status": "SUCCESS"
 }

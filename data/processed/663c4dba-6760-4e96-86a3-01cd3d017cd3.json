@@ -1,6 +1,7 @@
 {
-    "company": "Sattrix Information Security Limited",
-    "announcement_date": "07th July, 2026",
+    "company": "we are pleased to inform you that Sattrix Information Security Limited",
+    "announcement_type": "ORDER",
+    "announcement_date": "2026-07-07",
     "awarding_entity": "",
     "order_value": "Size of Contract – 9,30,00,000.00",
     "order_value_crore": 9.3,
@@ -8,5 +9,9 @@
     "order_type": "Managed Security Services for cyber security defence center",
     "domestic": "Domestic",
     "project_description": "",
-    "source_file": "663c4dba-6760-4e96-86a3-01cd3d017cd3.txt"
+    "source_file": "663c4dba-6760-4e96-86a3-01cd3d017cd3.txt",
+    "customer": "",
+    "exchange": "BSE",
+    "confidence_score": 1.0,
+    "processing_status": "SUCCESS"
 }

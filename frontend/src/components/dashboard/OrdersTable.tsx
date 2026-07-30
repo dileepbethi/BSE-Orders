@@ -110,7 +110,7 @@ function OrdersTable() {
                 key={order.id}
                 onClick={() => navigate(`/order/${order.id}`)}
                 className="cursor-pointer border-b border-slate-800 transition hover:bg-slate-800"
-              >
+              type database\database_manager.py>
 
                 <td className="p-3">
                   {order.company}

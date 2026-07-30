@@ -13,7 +13,7 @@ class DatabaseManager:
     def __init__(self):
 
         self.connection = sqlite3.connect(
-            "database/bse_orders_v2.db"
+            "database/bse_orders.db"
         )
 
         self.cursor = self.connection.cursor()
@@ -36,18 +36,6 @@ class DatabaseManager:
 
                 order_value TEXT,
 
-                order_value_crore REAL,
-
-                awarding_entity TEXT,
-
-                execution_period TEXT,
-
-                order_type TEXT,
-
-                domestic TEXT,
-
-                project_description TEXT,
-
                 source_file TEXT UNIQUE,
 
                 exchange TEXT DEFAULT 'BSE',
@@ -64,7 +52,7 @@ class DatabaseManager:
 
         self.connection.commit()
 
-    def insert(self, record: dict):
+    def insert_record(self, record: dict):
 
         self.cursor.execute(
             """
@@ -75,12 +63,6 @@ class DatabaseManager:
                 announcement_date,
                 announcement_type,
                 order_value,
-                order_value_crore,
-                awarding_entity,
-                execution_period,
-                order_type,
-                domestic,
-                project_description,
                 source_file,
                 exchange,
                 confidence_score,
@@ -88,7 +70,7 @@ class DatabaseManager:
 
             )
 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
 
@@ -101,18 +83,6 @@ class DatabaseManager:
                 record.get("announcement_type", ""),
 
                 record.get("order_value", ""),
-
-                record.get("order_value_crore", 0.0),
-
-                record.get("awarding_entity", ""),
-
-                record.get("execution_period", ""),
-
-                record.get("order_type", ""),
-
-                record.get("domestic", ""),
-
-                record.get("project_description", ""),
 
                 record.get("source_file", ""),
 
@@ -142,14 +112,4 @@ class DatabaseManager:
     def close(self):
 
         self.connection.close()
-    def count(self):
-
-        self.cursor.execute(
-            """
-            SELECT COUNT(*)
-            FROM announcements
-            """
-        )
-
-        return self.cursor.fetchone()[0]
         

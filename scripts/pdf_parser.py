@@ -29,7 +29,7 @@ from scripts.entity_extractor import EntityExtractor
 from scripts.field_parser import FieldParser
 from scripts.field_cleaner import FieldCleaner
 from scripts.table_parser_v2 import TableParserV2
-from scripts.database_manager import DatabaseManager
+from database.database_manager import DatabaseManager
 from scripts.quality_classifier_v2 import QualityClassifierV2
 from scripts.record_validator import RecordValidator
 
@@ -120,7 +120,15 @@ class PDFParser:
 
             "project_description": fields["terms"],
 
-            "source_file": file_path.name
+            "source_file": file_path.name,
+
+            "customer": "",
+
+            "exchange": "BSE",
+
+            "confidence_score": 1.0,
+
+            "processing_status": "SUCCESS",
 
         }
     def save_json(self, file_path, record):
