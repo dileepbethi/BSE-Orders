@@ -5,7 +5,7 @@ Sprint 6
 Version: 2.0
 """
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Body
 from fastapi.middleware.cors import CORSMiddleware
 
 from database.search_engine import SearchEngine
@@ -234,7 +234,7 @@ def get_orders(
 
     for row in rows:
 
-        results.append({
+               results.append({
 
             "id": row[0],
 
@@ -248,15 +248,27 @@ def get_orders(
 
             "order_value": row[5],
 
-            "source_file": row[6],
+            "order_value_crore": row[6],
 
-            "exchange": row[7],
+            "awarding_entity": row[7],
 
-            "confidence_score": row[8],
+            "execution_period": row[8],
 
-            "processing_status": row[9],
+            "order_type": row[9],
 
-            "created_at": row[10]
+            "domestic": row[10],
+
+            "project_description": row[11],
+
+            "source_file": row[12],
+
+            "exchange": row[13],
+
+            "confidence_score": row[14],
+
+            "processing_status": row[15],
+
+            "created_at": row[16]
 
         })
 
@@ -274,19 +286,41 @@ def search_orders(query: str):
 
     for row in rows:
 
-        orders.append({
+       orders.append({
 
-            "id": row[0],
-            "company": row[1],
-            "customer": row[2],
-            "announcement_date": row[3],
-            "announcement_type": row[4],
-            "order_value": row[5],
-            "source_file": row[6],
-            "exchange": row[7],
-            "confidence_score": row[8],
-            "processing_status": row[9],
-            "created_at": row[10]
+        "id": row[0],
+
+        "company": row[1],
+
+        "customer": row[2],
+
+        "announcement_date": row[3],
+
+        "announcement_type": row[4],
+
+        "order_value": row[5],
+
+        "order_value_crore": row[6],
+
+        "awarding_entity": row[7],
+
+        "execution_period": row[8],
+
+        "order_type": row[9],
+
+        "domestic": row[10],
+
+        "project_description": row[11],
+
+        "source_file": row[12],
+
+        "exchange": row[13],
+
+        "confidence_score": row[14],
+
+        "processing_status": row[15],
+
+        "created_at": row[16]
 
         })
 
@@ -310,16 +344,38 @@ def get_order(order_id: int):
     return {
 
         "id": row[0],
+
         "company": row[1],
+
         "customer": row[2],
+
         "announcement_date": row[3],
+
         "announcement_type": row[4],
+
         "order_value": row[5],
-        "source_file": row[6],
-        "exchange": row[7],
-        "confidence_score": row[8],
-        "processing_status": row[9],
-        "created_at": row[10]
+
+        "order_value_crore": row[6],
+
+        "awarding_entity": row[7],
+
+        "execution_period": row[8],
+
+        "order_type": row[9],
+
+        "domestic": row[10],
+
+        "project_description": row[11],
+
+        "source_file": row[12],
+
+        "exchange": row[13],
+
+        "confidence_score": row[14],
+
+        "processing_status": row[15],
+
+        "created_at": row[16]
 
     }
 # =====================================================
@@ -336,8 +392,8 @@ def dashboard_stats():
         "total_companies": search.get_total_companies(),
 
         # Temporary values until these are calculated properly
-        "domestic_orders": 0,
-        "international_orders": 0,
+        "domestic_orders": search.get_domestic_orders(),
+        "international_orders": search.get_international_orders(),
     }
 
     search.close()
@@ -363,3 +419,26 @@ def monthly_orders():
     search.close()
 
     return data
+# =====================================================
+# UPDATE ORDER
+# =====================================================
+
+@app.put("/orders/{order_id}")
+def update_order(
+    order_id: int,
+    data: dict = Body(...)
+):
+
+    search = SearchEngine()
+
+    search.update_order(
+        order_id,
+        data
+    )
+
+    search.close()
+
+    return {
+        "success": True,
+        "message": "Order updated successfully"
+    }

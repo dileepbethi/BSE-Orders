@@ -145,7 +145,104 @@ return (
       {order.order_value || "-"}
     </h2>
   </div>
+  <div>
+  <p className="text-sm text-slate-400">
+    Order Value (Crore)
+  </p>
 
+  <h2 className="mt-1 text-xl font-semibold text-green-400">
+    {order.order_value_crore ?? "-"}
+  </h2>
+</div>
+
+<div>
+  <p className="text-sm text-slate-400">
+    Awarding Entity
+  </p>
+
+  <h2 className="mt-1 text-xl font-semibold text-white">
+    {order.awarding_entity || "-"}
+  </h2>
+</div>
+
+<div>
+  <p className="text-sm text-slate-400">
+    Execution Period
+  </p>
+
+  <h2 className="mt-1 text-xl font-semibold text-white">
+    {order.execution_period || "-"}
+  </h2>
+</div>
+
+<div>
+  <p className="text-sm text-slate-400">
+    Order Type
+  </p>
+
+  <h2 className="mt-1 text-xl font-semibold text-white">
+    {order.order_type || "-"}
+  </h2>
+</div>
+<div>
+  <p className="text-sm text-slate-400">
+    Domestic / International
+  </p>
+
+  <h2 className="mt-1 text-xl font-semibold text-white">
+    {order.domestic || "-"}
+  </h2>
+</div>
+
+<div>
+  <p className="text-sm text-slate-400">
+    Exchange
+  </p>
+
+  <h2 className="mt-1 text-xl font-semibold text-white">
+    {order.exchange}
+  </h2>
+</div>
+
+<div>
+  <p className="text-sm text-slate-400">
+    Processing Status
+  </p>
+
+  <h2 className="mt-1 text-xl font-semibold text-emerald-400">
+    {order.processing_status}
+  </h2>
+</div>
+
+<div>
+  <p className="text-sm text-slate-400">
+    Confidence Score
+  </p>
+
+  <h2 className="mt-1 text-xl font-semibold text-white">
+    {order.confidence_score}
+  </h2>
+</div>
+
+<div className="col-span-2">
+  <p className="text-sm text-slate-400">
+    Project Description
+  </p>
+
+  <p className="mt-2 leading-7 text-white">
+    {order.project_description || "-"}
+  </p>
+</div>
+
+<div className="col-span-2">
+  <p className="text-sm text-slate-400">
+    Source File
+  </p>
+
+  <p className="mt-2 break-all text-white">
+    {order.source_file}
+  </p>
+</div>
 </div>
     </div>
 

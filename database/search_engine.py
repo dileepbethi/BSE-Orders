@@ -13,7 +13,7 @@ class SearchEngine:
     def __init__(self):
 
         self.connection = sqlite3.connect(
-            "database/bse_orders.db"
+            "database/bse_orders_v2.db"
         )
 
         self.cursor = self.connection.cursor()
@@ -173,7 +173,45 @@ class SearchEngine:
         )
 
         return self.cursor.fetchall()
-        # =====================================================
+
+    # =====================================================
+    # UPDATE ORDER
+    # =====================================================
+
+    def update_order(self, order_id: int, data: dict):
+
+        self.cursor.execute(
+            """
+            UPDATE announcements
+            SET
+                company = ?,
+                customer = ?,
+                awarding_entity = ?,
+                order_value = ?,
+                order_value_crore = ?,
+                execution_period = ?,
+                order_type = ?,
+                domestic = ?,
+                project_description = ?
+            WHERE id = ?
+            """,
+            (
+                data["company"],
+                data["customer"],
+                data["awarding_entity"],
+                data["order_value"],
+                data["order_value_crore"],
+                data["execution_period"],
+                data["order_type"],
+                data["domestic"],
+                data["project_description"],
+                order_id,
+            ),
+        )
+
+        self.connection.commit()
+
+    # =====================================================
     # GET SINGLE ORDER
     # =====================================================
 
@@ -219,3 +257,35 @@ class SearchEngine:
             })
 
         return result
+    # =====================================================
+    # DOMESTIC ORDERS
+    # =====================================================
+
+    def get_domestic_orders(self):
+
+        self.cursor.execute(
+            """
+            SELECT COUNT(*)
+            FROM announcements
+            WHERE LOWER(domestic) = 'domestic'
+            """
+        )
+
+        return self.cursor.fetchone()[0]
+
+
+    # =====================================================
+    # INTERNATIONAL ORDERS
+    # =====================================================
+
+    def get_international_orders(self):
+
+        self.cursor.execute(
+            """
+            SELECT COUNT(*)
+            FROM announcements
+            WHERE LOWER(domestic) = 'international'
+            """
+        )
+
+        return self.cursor.fetchone()[0]
