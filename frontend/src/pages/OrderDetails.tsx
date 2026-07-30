@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import PageHeader from "../components/common/PageHeader";
+import EditableField from "../components/common/EditableField";
 
 import {
   getOrderDetails,
+  updateOrder,
 } from "../services/orderDetailsService";
 
 import type {
@@ -20,6 +22,29 @@ function OrderDetailsPage() {
 
   const [loading, setLoading] =
     useState(true);
+
+const handleSave = async () => {
+
+  if (!id || !order) return;
+
+  try {
+
+    await updateOrder(
+      Number(id),
+      {}
+    );
+
+    alert("Save feature will be completed in the next step.");
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert("Failed to save changes.");
+
+  }
+
+};
 
   useEffect(() => {
 
@@ -94,11 +119,12 @@ return (
 
     <div className="mb-6 flex justify-end">
 
-      <button
-        className="rounded-lg bg-blue-600 px-5 py-2 font-medium text-white hover:bg-blue-700"
+     <button
+        onClick={handleSave}
+        className="rounded-lg bg-green-600 px-5 py-2 font-medium text-white hover:bg-green-700"
       >
-        Edit
-      </button>
+        Save
+    </button>
 
     </div>
 
@@ -106,15 +132,12 @@ return (
 
       <div className="grid grid-cols-2 gap-6">
 
-  <div>
-    <p className="text-sm text-slate-400">
-      Company
-    </p>
-
-    <h2 className="mt-1 text-xl font-semibold text-white">
-      {order.company}
-    </h2>
-  </div>
+  <EditableField
+  label="Company"
+  value={order.company}
+  editing={false}
+  onChange={() => {}}
+/>
 
   <div>
     <p className="text-sm text-slate-400">
