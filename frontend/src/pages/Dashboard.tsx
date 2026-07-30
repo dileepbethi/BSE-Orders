@@ -6,22 +6,30 @@ import ChartCard from "../components/dashboard/ChartCard";
 import PieChartCard from "../components/dashboard/PieChartCard";
 import OrdersTable from "../components/dashboard/OrdersTable";
 
-import { getDashboardStats } from "../services/dashboardService";
-import type { DashboardStats } from "../services/dashboardService";
+import {
+  getDashboardStats,
+  type DashboardStats,
+} from "../services/dashboardService";
+
 function Dashboard() {
+
   const [stats, setStats] = useState<DashboardStats>({
-    total_records: 0,
-    total_companies: 0,
-    total_customers: 0,
     total_orders: 0,
+    total_companies: 0,
+    domestic_orders: 0,
+    international_orders: 0,
   });
 
   useEffect(() => {
+
     getDashboardStats()
-      .then(setStats)
-      .catch((error) => {
+      .then((data) => {
+        setStats(data);
+      })
+      .catch((error: unknown) => {
         console.error("Dashboard API Error:", error);
       });
+
   }, []);
 
   return (
@@ -32,50 +40,60 @@ function Dashboard() {
       />
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+
         <KPICard
           title="Total Orders"
           value={stats.total_orders.toString()}
-          footer="Orders detected"
+          footer="Orders available"
         />
 
         <KPICard
           title="Total Companies"
           value={stats.total_companies.toString()}
-          footer="Unique companies"
+          footer="Listed companies"
         />
 
         <KPICard
-          title="Total Records"
-          value={stats.total_records.toString()}
-          footer="Announcements processed"
+          title="Domestic Orders"
+          value={stats.domestic_orders.toString()}
+          footer="Domestic contracts"
         />
 
         <KPICard
-          title="Total Customers"
-          value={stats.total_customers.toString()}
-          footer="Unique customers"
+          title="International Orders"
+          value={stats.international_orders.toString()}
+          footer="International contracts"
         />
+
       </div>
 
       <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
+
         <div className="lg:col-span-2">
+
           <ChartCard
             title="Monthly Order Trend"
-            subtitle="Coming in next step"
+            subtitle="Monthly announcements"
           />
+
         </div>
 
         <PieChartCard
           title="Order Distribution"
-          subtitle="Coming in next step"
+          subtitle="Distribution of orders"
         />
+
       </div>
 
       <div className="mt-8">
+
         <OrdersTable />
+
       </div>
+
     </>
   );
+
 }
 
 export default Dashboard;

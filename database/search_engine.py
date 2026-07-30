@@ -173,3 +173,49 @@ class SearchEngine:
         )
 
         return self.cursor.fetchall()
+        # =====================================================
+    # GET SINGLE ORDER
+    # =====================================================
+
+    def get_order(self, order_id: int):
+
+        self.cursor.execute(
+            """
+            SELECT *
+            FROM announcements
+            WHERE id = ?
+            """,
+            (order_id,)
+        )
+
+        return self.cursor.fetchone()
+    # =====================================================
+    # MONTHLY ORDER TREND
+    # =====================================================
+
+    def get_monthly_orders(self):
+
+        self.cursor.execute(
+            """
+            SELECT
+                substr(announcement_date, 1, 7) AS month,
+                COUNT(*) AS total
+            FROM announcements
+            WHERE announcement_type = 'ORDER'
+            GROUP BY substr(announcement_date, 1, 7)
+            ORDER BY month
+            """
+        )
+
+        rows = self.cursor.fetchall()
+
+        result = []
+
+        for row in rows:
+
+            result.append({
+                "month": row[0],
+                "value": row[1]
+            })
+
+        return result

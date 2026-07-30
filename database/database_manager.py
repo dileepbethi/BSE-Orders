@@ -112,3 +112,4 @@ class DatabaseManager:
     def close(self):
 
         self.connection.close()
+        

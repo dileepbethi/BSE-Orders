@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import Card from "../ui/Card";
 
@@ -12,8 +13,9 @@ import type { Order } from "../../services/ordersService";
 function OrdersTable() {
 
   const [orders, setOrders] = useState<Order[]>([]);
+    const [search, setSearch] = useState("");
+    const navigate = useNavigate();
 
-  const [search, setSearch] = useState("");
 
   useEffect(() => {
 
@@ -106,7 +108,8 @@ function OrdersTable() {
 
               <tr
                 key={order.id}
-                className="border-b border-slate-800"
+                onClick={() => navigate(`/order/${order.id}`)}
+                className="cursor-pointer border-b border-slate-800 transition hover:bg-slate-800"
               >
 
                 <td className="p-3">

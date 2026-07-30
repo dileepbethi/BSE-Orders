@@ -291,3 +291,75 @@ def search_orders(query: str):
         })
 
     return orders
+# =====================================================
+# GET SINGLE ORDER
+# =====================================================
+
+@app.get("/orders/{order_id}")
+def get_order(order_id: int):
+
+    search = SearchEngine()
+
+    row = search.get_order(order_id)
+
+    search.close()
+
+    if row is None:
+        return {"error": "Order not found"}
+
+    return {
+
+        "id": row[0],
+        "company": row[1],
+        "customer": row[2],
+        "announcement_date": row[3],
+        "announcement_type": row[4],
+        "order_value": row[5],
+        "source_file": row[6],
+        "exchange": row[7],
+        "confidence_score": row[8],
+        "processing_status": row[9],
+        "created_at": row[10]
+
+    }
+# =====================================================
+# DASHBOARD STATS
+# =====================================================
+
+@app.get("/dashboard/stats")
+def dashboard_stats():
+
+    search = SearchEngine()
+
+    data = {
+        "total_orders": search.get_total_orders(),
+        "total_companies": search.get_total_companies(),
+
+        # Temporary values until these are calculated properly
+        "domestic_orders": 0,
+        "international_orders": 0,
+    }
+
+    search.close()
+
+    return data
+
+
+# =====================================================
+# MONTHLY ORDER TREND
+# =====================================================
+
+# =====================================================
+# MONTHLY ORDER TREND
+# =====================================================
+
+@app.get("/dashboard/monthly-orders")
+def monthly_orders():
+
+    search = SearchEngine()
+
+    data = search.get_monthly_orders()
+
+    search.close()
+
+    return data

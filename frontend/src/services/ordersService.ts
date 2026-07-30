@@ -33,3 +33,4 @@ export async function searchOrders(query: string): Promise<Order[]> {
 
   return response.data;
 }
+
