@@ -7,6 +7,7 @@ import EditableField from "../components/common/EditableField";
 import {
   getOrderDetails,
   updateOrder,
+  getOrderPdfUrl,
 } from "../services/orderDetailsService";
 
 import type {
@@ -17,34 +18,22 @@ function OrderDetailsPage() {
 
   const { id } = useParams();
 
+  const pdfUrl =
+  id
+    ? getOrderPdfUrl(Number(id))
+    : "";
+
   const [order, setOrder] =
+    useState<OrderDetails | null>(null);
+
+  const [editedOrder, setEditedOrder] =
     useState<OrderDetails | null>(null);
 
   const [loading, setLoading] =
     useState(true);
 
-const handleSave = async () => {
-
-  if (!id || !order) return;
-
-  try {
-
-    await updateOrder(
-      Number(id),
-      {}
-    );
-
-    alert("Save feature will be completed in the next step.");
-
-  } catch (error) {
-
-    console.error(error);
-
-    alert("Failed to save changes.");
-
-  }
-
-};
+  const [isEditing, setIsEditing] =
+    useState(false);
 
   useEffect(() => {
 
@@ -54,9 +43,12 @@ const handleSave = async () => {
 
       try {
 
-        const data = await getOrderDetails(Number(id));
+        const data =
+          await getOrderDetails(Number(id));
 
         setOrder(data);
+
+        setEditedOrder(data);
 
       } catch (error) {
 
@@ -74,6 +66,33 @@ const handleSave = async () => {
 
   }, [id]);
 
+  async function handleSave() {
+
+    if (!id || !editedOrder) return;
+
+    try {
+
+      await updateOrder(
+        Number(id),
+        editedOrder
+      );
+
+      setOrder(editedOrder);
+
+      setIsEditing(false);
+
+      alert("Order updated successfully.");
+
+    } catch (error) {
+
+      console.error(error);
+
+      alert("Failed to update order.");
+
+    }
+
+  }
+
   if (loading) {
 
     return (
@@ -84,14 +103,14 @@ const handleSave = async () => {
         />
 
         <p className="text-slate-400">
-          Loading order...
+          Loading...
         </p>
       </>
     );
 
   }
 
-  if (!order) {
+  if (!order || !editedOrder) {
 
     return (
       <>
@@ -108,170 +127,228 @@ const handleSave = async () => {
 
   }
 
-return (
+  return (
 
-  <>
+    <>
 
-    <PageHeader
-      title="Order Details"
-      subtitle="Corporate Announcement"
-    />
+      <PageHeader
+        title="Order Details"
+        subtitle="Corporate Announcement"
+      />
 
-    <div className="mb-6 flex justify-end">
+      <div className="mb-6 flex justify-end">
 
-     <button
-        onClick={handleSave}
-        className="rounded-lg bg-green-600 px-5 py-2 font-medium text-white hover:bg-green-700"
-      >
-        Save
-    </button>
+        {isEditing ? (
 
-    </div>
+          <div className="flex gap-3">
 
-    <div className="rounded-xl border border-slate-700 bg-slate-900 p-8">
+            <button
+              onClick={handleSave}
+              className="rounded-lg bg-green-600 px-5 py-2 font-medium text-white hover:bg-green-700"
+            >
+              Save
+            </button>
 
-      <div className="grid grid-cols-2 gap-6">
+            <button
+              onClick={() => {
 
-  <EditableField
-  label="Company"
-  value={order.company}
-  editing={false}
-  onChange={() => {}}
-/>
+                setEditedOrder(order);
 
-  <div>
-    <p className="text-sm text-slate-400">
-      Customer
-    </p>
+                setIsEditing(false);
 
-    <h2 className="mt-1 text-xl font-semibold text-white">
-      {order.customer || "-"}
-    </h2>
-  </div>
+              }}
+              className="rounded-lg bg-slate-600 px-5 py-2 font-medium text-white hover:bg-slate-700"
+            >
+              Cancel
+            </button>
 
-  <div>
-    <p className="text-sm text-slate-400">
-      Announcement Date
-    </p>
+          </div>
 
-    <h2 className="mt-1 text-xl font-semibold text-white">
-      {order.announcement_date}
-    </h2>
-  </div>
+        ) : (
 
-  <div>
-    <p className="text-sm text-slate-400">
-      Order Value
-    </p>
+          <button
+            onClick={() => setIsEditing(true)}
+            className="rounded-lg bg-blue-600 px-5 py-2 font-medium text-white hover:bg-blue-700"
+          >
+            Edit
+          </button>
 
-    <h2 className="mt-1 text-xl font-semibold text-green-400">
-      {order.order_value || "-"}
-    </h2>
-  </div>
-  <div>
-  <p className="text-sm text-slate-400">
-    Order Value (Crore)
-  </p>
+        )}
 
-  <h2 className="mt-1 text-xl font-semibold text-green-400">
-    {order.order_value_crore ?? "-"}
+      </div>
+
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+
+        <div className="rounded-xl border border-slate-700 bg-slate-900 p-8">
+
+          <EditableField
+            label="Company"
+            value={editedOrder.company}
+            editing={isEditing}
+            onChange={(value) =>
+              setEditedOrder({
+                ...editedOrder,
+                company: value,
+              })
+            }
+          />
+
+          <EditableField
+            label="Customer"
+            value={editedOrder.customer || ""}
+            editing={isEditing}
+            onChange={(value) =>
+              setEditedOrder({
+                ...editedOrder,
+                customer: value,
+              })
+            }
+          />
+
+          <EditableField
+            label="Order Value"
+            value={editedOrder.order_value || ""}
+            editing={isEditing}
+            onChange={(value) =>
+              setEditedOrder({
+                ...editedOrder,
+                order_value: value,
+              })
+            }
+          />
+
+          <EditableField
+            label="Awarding Entity"
+            value={editedOrder.awarding_entity || ""}
+            editing={isEditing}
+            onChange={(value) =>
+              setEditedOrder({
+                ...editedOrder,
+                awarding_entity: value,
+              })
+            }
+          />
+          <EditableField
+            label="Execution Period"
+            value={editedOrder.execution_period || ""}
+            editing={isEditing}
+            onChange={(value) =>
+              setEditedOrder({
+                ...editedOrder,
+                execution_period: value,
+              })
+            }
+          />
+
+          <EditableField
+            label="Order Type"
+            value={editedOrder.order_type || ""}
+            editing={isEditing}
+            onChange={(value) =>
+              setEditedOrder({
+                ...editedOrder,
+                order_type: value,
+              })
+            }
+          />
+
+          <EditableField
+            label="Domestic / International"
+            value={editedOrder.domestic || ""}
+            editing={isEditing}
+            onChange={(value) =>
+              setEditedOrder({
+                ...editedOrder,
+                domestic: value,
+              })
+            }
+          />
+
+          <EditableField
+            label="Exchange"
+            value={editedOrder.exchange}
+            editing={isEditing}
+            onChange={(value) =>
+              setEditedOrder({
+                ...editedOrder,
+                exchange: value,
+              })
+            }
+          />
+
+          <EditableField
+            label="Confidence Score"
+            value={editedOrder.confidence_score}
+            editing={isEditing}
+            onChange={(value) =>
+              setEditedOrder({
+                ...editedOrder,
+                confidence_score: Number(value),
+              })
+            }
+          />
+
+          <div className="col-span-2">
+
+            <p className="text-sm text-slate-400">
+              Project Description
+            </p>
+
+            {isEditing ? (
+
+              <textarea
+                value={editedOrder.project_description || ""}
+                onChange={(e) =>
+                  setEditedOrder({
+                    ...editedOrder,
+                    project_description: e.target.value,
+                  })
+                }
+                rows={5}
+                className="mt-2 w-full rounded-lg border border-slate-600 bg-slate-800 p-3 text-white focus:border-blue-500 focus:outline-none"
+              />
+
+            ) : (
+
+              <p className="mt-2 leading-7 text-white">
+                {editedOrder.project_description || "-"}
+              </p>
+
+            )}
+
+          </div>
+
+          <div className="col-span-2">
+
+            <p className="text-sm text-slate-400">
+              Source File
+            </p>
+
+            <p className="mt-2 break-all text-white">
+              {editedOrder.source_file}
+            </p>
+
+          </div>
+        </div>
+        <div className="rounded-xl border border-slate-700 bg-slate-900 p-4">
+
+  <h2 className="mb-4 text-lg font-semibold text-white">
+    Original PDF
   </h2>
+
+  <iframe
+    src={pdfUrl}
+    title="Original PDF"
+    className="h-[900px] w-full rounded-lg border border-slate-700"
+  />
+
 </div>
 
-<div>
-  <p className="text-sm text-slate-400">
-    Awarding Entity
-  </p>
+      </div>
 
-  <h2 className="mt-1 text-xl font-semibold text-white">
-    {order.awarding_entity || "-"}
-  </h2>
-</div>
+    </>
 
-<div>
-  <p className="text-sm text-slate-400">
-    Execution Period
-  </p>
-
-  <h2 className="mt-1 text-xl font-semibold text-white">
-    {order.execution_period || "-"}
-  </h2>
-</div>
-
-<div>
-  <p className="text-sm text-slate-400">
-    Order Type
-  </p>
-
-  <h2 className="mt-1 text-xl font-semibold text-white">
-    {order.order_type || "-"}
-  </h2>
-</div>
-<div>
-  <p className="text-sm text-slate-400">
-    Domestic / International
-  </p>
-
-  <h2 className="mt-1 text-xl font-semibold text-white">
-    {order.domestic || "-"}
-  </h2>
-</div>
-
-<div>
-  <p className="text-sm text-slate-400">
-    Exchange
-  </p>
-
-  <h2 className="mt-1 text-xl font-semibold text-white">
-    {order.exchange}
-  </h2>
-</div>
-
-<div>
-  <p className="text-sm text-slate-400">
-    Processing Status
-  </p>
-
-  <h2 className="mt-1 text-xl font-semibold text-emerald-400">
-    {order.processing_status}
-  </h2>
-</div>
-
-<div>
-  <p className="text-sm text-slate-400">
-    Confidence Score
-  </p>
-
-  <h2 className="mt-1 text-xl font-semibold text-white">
-    {order.confidence_score}
-  </h2>
-</div>
-
-<div className="col-span-2">
-  <p className="text-sm text-slate-400">
-    Project Description
-  </p>
-
-  <p className="mt-2 leading-7 text-white">
-    {order.project_description || "-"}
-  </p>
-</div>
-
-<div className="col-span-2">
-  <p className="text-sm text-slate-400">
-    Source File
-  </p>
-
-  <p className="mt-2 break-all text-white">
-    {order.source_file}
-  </p>
-</div>
-</div>
-    </div>
-
-  </>
-
-);
+  );
 
 }
 

@@ -7,6 +7,8 @@ Version: 2.0
 
 from fastapi import FastAPI, Body
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from pathlib import Path
 
 from database.search_engine import SearchEngine
 
@@ -442,3 +444,33 @@ def update_order(
         "success": True,
         "message": "Order updated successfully"
     }
+# =====================================================
+# GET PDF
+# =====================================================
+
+@app.get("/orders/{order_id}/pdf")
+def get_order_pdf(order_id: int):
+
+    search = SearchEngine()
+
+    row = search.get_order(order_id)
+
+    search.close()
+
+    if row is None:
+        return {"error": "Order not found"}
+
+    source_file = row[12]
+
+    pdf_name = Path(source_file).stem + ".pdf"
+
+    pdf_path = Path("data/downloads") / pdf_name
+
+    if not pdf_path.exists():
+        return {"error": "PDF not found"}
+
+    return FileResponse(
+        path=pdf_path,
+        media_type="application/pdf",
+        filename=pdf_name
+    )

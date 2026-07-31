@@ -56,3 +56,10 @@ export async function updateOrder(
   );
 
 }
+export function getOrderPdfUrl(
+  id: number
+): string {
+
+  return `${api.defaults.baseURL}/orders/${id}/pdf`;
+
+}
