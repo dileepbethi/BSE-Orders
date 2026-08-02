@@ -88,7 +88,7 @@ class SearchEngine:
 
         return self.cursor.fetchall()
 
-        # =====================================================
+    # =====================================================
     # GLOBAL SEARCH
     # =====================================================
 
@@ -158,8 +158,7 @@ class SearchEngine:
         )
 
         return self.cursor.fetchone()[0]
-    def get_all_orders(self, page: int = 1, limit: int = 20):
-
+    def get_orders_page(self, page: int = 1, limit: int = 20):
         offset = (page - 1) * limit
 
         self.cursor.execute(
@@ -170,6 +169,17 @@ class SearchEngine:
             LIMIT ? OFFSET ?
             """,
             (limit, offset)
+        )
+
+        return self.cursor.fetchall()
+    def get_all_orders(self):
+
+        self.cursor.execute(
+            """
+            SELECT *
+            FROM announcements
+            ORDER BY announcement_date DESC
+            """
         )
 
         return self.cursor.fetchall()
@@ -289,3 +299,34 @@ class SearchEngine:
         )
 
         return self.cursor.fetchone()[0]
+
+
+    # =========================================
+    # REVIEWS
+    # =========================================
+
+    def get_pending_reviews(self):
+
+        self.cursor.execute(
+            """
+            SELECT *
+            FROM announcements
+            WHERE processing_status='SUCCESS'
+            ORDER BY created_at DESC
+            """
+        )
+
+        return self.cursor.fetchall()
+
+    def get_review(self, review_id: int):
+
+        self.cursor.execute(
+            """
+            SELECT *
+            FROM announcements
+            WHERE id = ?
+            """,
+            (review_id,)
+        )
+
+        return self.cursor.fetchone()

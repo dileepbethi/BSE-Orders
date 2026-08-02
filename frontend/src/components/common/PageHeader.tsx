@@ -1,20 +1,33 @@
-type PageHeaderProps = {
+type Props = {
   title: string;
-  subtitle: string;
+  subtitle?: string;
 };
 
-function PageHeader({ title, subtitle }: PageHeaderProps) {
+function PageHeader({
+  title,
+  subtitle,
+}: Props) {
+
   return (
+
     <div className="mb-8">
-      <h1 className="text-3xl font-bold text-white">
+
+      <h1 className="text-4xl font-bold tracking-tight text-white">
         {title}
       </h1>
 
-      <p className="mt-2 text-slate-400">
-        {subtitle}
-      </p>
+      {subtitle && (
+
+        <p className="mt-2 text-slate-400">
+          {subtitle}
+        </p>
+
+      )}
+
     </div>
+
   );
+
 }
 
 export default PageHeader;

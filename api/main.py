@@ -4,7 +4,8 @@ OrderIQ API
 Sprint 6
 Version: 2.0
 """
-
+import math
+from re import search
 from fastapi import FastAPI, Body
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
@@ -220,23 +221,32 @@ def search_date(date: str):
 # ALL ORDERS
 # ==========================================================
 
+import math
+
+
 @app.get("/orders")
 def get_orders(
     page: int = 1,
-    limit: int = 20
+    limit: int = 20,
 ):
 
     search = SearchEngine()
 
-    rows = search.get_all_orders()
+    all_rows = search.get_all_orders()
+
+    total = len(all_rows)
+
+    pages = math.ceil(total / limit)
+
+    rows = search.get_orders_page(page, limit)
 
     search.close()
 
-    results = []
+    items = []
 
     for row in rows:
 
-               results.append({
+        items.append({
 
             "id": row[0],
 
@@ -270,11 +280,17 @@ def get_orders(
 
             "processing_status": row[15],
 
-            "created_at": row[16]
+            "created_at": row[16],
 
         })
 
-    return results
+    return {
+        "items": items,
+        "page": page,
+        "limit": limit,
+        "total": total,
+        "pages": pages,
+    }
 @app.get("/search")
 def search_orders(query: str):
 
@@ -472,5 +488,122 @@ def get_order_pdf(order_id: int):
     return FileResponse(
         path=pdf_path,
         media_type="application/pdf",
-        filename=pdf_name
-    )
+        headers={
+            "Content-Disposition": f'inline; filename="{pdf_name}"',
+             "Cache-Control": "no-cache, no-store, must-revalidate",
+        },
+    )   
+# =====================================================
+# REVIEW QUEUE
+# =====================================================
+
+@app.get("/review/pending")
+def get_pending_reviews():
+
+    search = SearchEngine()
+
+    rows = search.get_pending_reviews()
+
+    search.close()
+
+    reviews = []
+
+    for row in rows:
+
+        reviews.append({
+
+            "id": row[0],
+
+            "company": row[1],
+
+            "customer": row[2],
+
+            "announcement_date": row[3],
+
+            "announcement_type": row[4],
+
+            "order_value": row[5],
+
+            "order_value_crore": row[6],
+
+            "awarding_entity": row[7],
+
+            "execution_period": row[8],
+
+            "order_type": row[9],
+
+            "domestic": row[10],
+
+            "project_description": row[11],
+
+            "source_file": row[12],
+
+            "exchange": row[13],
+
+            "confidence_score": row[14],
+
+            "processing_status": row[15],
+
+            "created_at": row[16],
+
+        })
+
+    return reviews
+
+
+# =====================================================
+# REVIEW WORKSPACE
+# =====================================================
+
+@app.get("/review/{review_id}")
+def get_review(review_id: int):
+
+    search = SearchEngine()
+
+    row = search.get_review(review_id)
+
+    search.close()
+
+    if row is None:
+
+        return {
+            "error": "Review not found"
+        }
+
+    return {
+
+        "id": row[0],
+
+        "company": row[1],
+
+        "customer": row[2],
+
+        "announcement_date": row[3],
+
+        "announcement_type": row[4],
+
+        "order_value": row[5],
+
+        "order_value_crore": row[6],
+
+        "awarding_entity": row[7],
+
+        "execution_period": row[8],
+
+        "order_type": row[9],
+
+        "domestic": row[10],
+
+        "project_description": row[11],
+
+        "source_file": row[12],
+
+        "exchange": row[13],
+
+        "confidence_score": row[14],
+
+        "processing_status": row[15],
+
+        "created_at": row[16],
+
+    }

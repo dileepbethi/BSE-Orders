@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 import PageHeader from "../components/common/PageHeader";
 import KPICard from "../components/dashboard/KPICard";
@@ -12,7 +13,6 @@ import {
 } from "../services/dashboardService";
 
 function Dashboard() {
-
   const [stats, setStats] = useState<DashboardStats>({
     total_orders: 0,
     total_companies: 0,
@@ -21,15 +21,16 @@ function Dashboard() {
   });
 
   useEffect(() => {
-
-    getDashboardStats()
-      .then((data) => {
+    async function loadDashboard() {
+      try {
+        const data = await getDashboardStats();
         setStats(data);
-      })
-      .catch((error: unknown) => {
+      } catch (error) {
         console.error("Dashboard API Error:", error);
-      });
+      }
+    }
 
+    loadDashboard();
   }, []);
 
   return (
@@ -40,7 +41,6 @@ function Dashboard() {
       />
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-
         <KPICard
           title="Total Orders"
           value={stats.total_orders.toString()}
@@ -64,36 +64,40 @@ function Dashboard() {
           value={stats.international_orders.toString()}
           footer="International contracts"
         />
-
       </div>
 
       <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
-
         <div className="lg:col-span-2">
-
           <ChartCard
             title="Monthly Order Trend"
             subtitle="Monthly announcements"
           />
-
         </div>
 
         <PieChartCard
           title="Order Distribution"
           subtitle="Distribution of orders"
         />
-
       </div>
 
       <div className="mt-8">
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-xl font-bold text-white">
+            Recent Orders
+          </h2>
+
+          <Link
+            to="/orders"
+            className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+          >
+            View All Orders
+          </Link>
+        </div>
 
         <OrdersTable />
-
       </div>
-
     </>
   );
-
 }
 
 export default Dashboard;

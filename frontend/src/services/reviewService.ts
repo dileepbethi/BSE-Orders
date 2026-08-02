@@ -1,6 +1,6 @@
 import { api } from "./api";
 
-export type Order = {
+export type Review = {
   id: number;
   company: string;
   customer: string;
@@ -14,33 +14,24 @@ export type Order = {
   created_at: string;
 };
 
-export type OrdersResponse = {
-  items: Order[];
-  total: number;
-  page: number;
-  limit: number;
-  pages: number;
-};
-
-export async function getOrders(
-  page = 1,
-  limit = 20
-): Promise<OrdersResponse> {
+export async function getPendingReviews(): Promise<Review[]> {
 
   const response = await api.get(
-    `/orders?page=${page}&limit=${limit}`
+    "/review/pending"
   );
 
   return response.data;
+
 }
 
-export async function searchOrders(
-  query: string
-): Promise<Order[]> {
+export async function getReview(
+  id: number
+): Promise<Review> {
 
   const response = await api.get(
-    `/search?query=${encodeURIComponent(query)}`
+    `/review/${id}`
   );
 
   return response.data;
+
 }

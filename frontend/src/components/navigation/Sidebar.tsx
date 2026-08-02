@@ -1,92 +1,119 @@
 import { NavLink } from "react-router-dom";
 
-const menuItems = [
+const menu = [
+
   {
-    name: "Dashboard",
+    title: "Dashboard",
     path: "/",
     icon: "📊",
   },
+
   {
-    name: "Orders",
-    path: "/",
+    title: "Orders",
+    path: "/orders",
     icon: "📄",
   },
+
   {
-    name: "Companies",
+    title: "Companies",
     path: "/companies",
     icon: "🏢",
   },
+
   {
-    name: "Review Queue",
+    title: "Review Queue",
     path: "/review",
     icon: "✅",
   },
+
   {
-    name: "Parser",
+    title: "Parser",
     path: "/parser",
     icon: "🤖",
   },
+
   {
-    name: "Analytics",
+    title: "Analytics",
     path: "/analytics",
     icon: "📈",
   },
+
   {
-    name: "Settings",
+    title: "Settings",
     path: "/settings",
     icon: "⚙️",
   },
+
 ];
 
 function Sidebar() {
+
   return (
-    <aside className="flex h-screen w-72 flex-col border-r border-slate-800 bg-slate-950">
+
+    <aside
+      className="
+        fixed
+        left-0
+        top-0
+        z-40
+        flex
+        h-screen
+        w-64
+        flex-col
+        border-r
+        border-slate-800
+        bg-slate-950
+      "
+    >
+
       <div className="border-b border-slate-800 p-6">
+
         <h1 className="text-2xl font-bold text-white">
+
           OrderIQ
+
         </h1>
 
-        <p className="mt-2 text-sm text-slate-400">
-          Enterprise Procurement Intelligence
+        <p className="mt-1 text-xs text-slate-400">
+
+          Procurement Intelligence
+
         </p>
+
       </div>
 
       <nav className="flex-1 space-y-2 p-4">
-        {menuItems.map((item) => (
+
+        {menu.map((item) => (
+
           <NavLink
-            key={item.name}
+            key={item.title}
             to={item.path}
             className={({ isActive }) =>
-              `flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition ${
+
+              `flex items-center gap-3 rounded-xl px-4 py-3 transition-all ${
                 isActive
                   ? "bg-blue-600 text-white"
                   : "text-slate-300 hover:bg-slate-800 hover:text-white"
               }`
+
             }
           >
-            <span className="text-lg">{item.icon}</span>
-            <span>{item.name}</span>
+
+            <span>{item.icon}</span>
+
+            <span>{item.title}</span>
+
           </NavLink>
+
         ))}
+
       </nav>
 
-      <div className="border-t border-slate-800 p-5">
-        <div className="rounded-xl bg-slate-900 p-4">
-          <p className="text-xs uppercase tracking-wider text-slate-500">
-            Parser Status
-          </p>
-
-          <div className="mt-2 flex items-center gap-2">
-            <div className="h-2 w-2 rounded-full bg-emerald-500"></div>
-
-            <span className="text-sm text-emerald-400">
-              Running
-            </span>
-          </div>
-        </div>
-      </div>
     </aside>
+
   );
+
 }
 
 export default Sidebar;

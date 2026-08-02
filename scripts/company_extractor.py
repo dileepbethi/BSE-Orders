@@ -3,6 +3,7 @@ OrderIQ Company Extractor
 Version: 3.0
 """
 
+from ast import pattern
 import re
 from typing import Optional
 
@@ -356,10 +357,15 @@ class CompanyExtractor:
             )
 
             if not match:
-                continue
+               continue
+
+            print("\nREFERENCE PATTERN:")
+            print(pattern)
+            print("RAW MATCH:", repr(match.group(1)))
 
             company = self.clean_company(match.group(1))
 
+            print("CLEANED :", repr(company))
             if self.is_valid_company(company):
                 return company
 
@@ -379,7 +385,7 @@ class CompanyExtractor:
 
             rf"For,?\s+({self.COMPANY_PATTERN})",
 
-            rf"FOR\s+({self.COMPANY_PATTERN})"
+            r"FOR\s+([A-Z][A-Z0-9&.,()'/\- ]+(?:LIMITED|LTD))"
 
         ]
 
@@ -394,7 +400,11 @@ class CompanyExtractor:
             if not match:
                 continue
 
+            
+
             company = self.clean_company(match.group(1))
+
+            
 
             if self.is_valid_company(company):
                 return company
@@ -417,22 +427,25 @@ class CompanyExtractor:
 
             self._body_strategy,
 
-            self._reference_strategy,
+            self._signature_strategy,
 
-            self._signature_strategy
+            self._reference_strategy
 
         ]
 
         for strategy in strategies:
 
+            
+
             company = strategy(text)
+
+            
 
             if not company:
                 continue
 
-            company = self.clean_company(company)
+            
 
             if self.is_valid_company(company):
+                
                 return company
-
-        return ""

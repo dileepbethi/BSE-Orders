@@ -5,7 +5,7 @@ This test verifies that every supported
 date format is normalized correctly.
 """
 
-from date_extractor import DateExtractor
+from scripts.date_extractor import DateExtractor
 
 
 extractor = DateExtractor()
@@ -21,6 +21,20 @@ samples = [
     "July 07, 2026",
 
     "January 30, 2026",
+
+    "uly 21, 2026",
+
+    "ry 30, 2026",
+
+    "Date : uly 21, 2026",
+
+    "Date : 7th uly, 2026",
+
+    "Date : July 7, 2026",
+
+    "Date : 21 July 2026",
+
+    "21st July, 2026",
 
 ]
 

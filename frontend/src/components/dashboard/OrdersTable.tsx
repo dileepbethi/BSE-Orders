@@ -26,7 +26,7 @@ function OrdersTable() {
         if (search.trim() === "") {
 
           const data = await getOrders(1, 10);
-          setOrders(data);
+          setOrders(data.items);
 
         } else {
 

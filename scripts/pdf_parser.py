@@ -22,6 +22,7 @@ from pathlib import Path
 import json
 
 from scripts.company_extractor import CompanyExtractor
+from scripts.customer_extractor import CustomerExtractor
 from scripts.date_extractor import DateExtractor
 from scripts.order_value_extractor import OrderValueExtractor
 from scripts.announcement_classifier import AnnouncementClassifier
@@ -43,6 +44,7 @@ class PDFParser:
     def __init__(self):
 
         self.company_extractor = CompanyExtractor()
+        self.customer_extractor = CustomerExtractor()
         self.date_extractor = DateExtractor()
         self.order_value_extractor = OrderValueExtractor()
         self.announcement_classifier = AnnouncementClassifier()
@@ -122,7 +124,7 @@ class PDFParser:
 
             "source_file": file_path.name,
 
-            "customer": "",
+            "customer": self.customer_extractor.extract(text),
 
             "exchange": "BSE",
 
