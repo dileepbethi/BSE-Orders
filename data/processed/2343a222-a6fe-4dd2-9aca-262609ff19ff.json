@@ -1,7 +1,8 @@
 {
     "company": "South West Pinnacle Exploration Ltd",
-    "announcement_type": "ORDER",
+    "customer": "",
     "announcement_date": "2026-07-07",
+    "announcement_type": "ORDER",
     "awarding_entity": "M/s Reliance Industries Ltd. (RIL)",
     "order_value": "Work Order Value is ~Rs. 166.82 Crores",
     "order_value_crore": 166.82,
@@ -10,8 +11,9 @@
     "domestic": "",
     "project_description": "All terms and conditions are same Whether order(s) / contract(s) have been Domestic entity awarded by domestic/ international entity",
     "source_file": "2343a222-a6fe-4dd2-9aca-262609ff19ff.txt",
-    "customer": "",
     "exchange": "BSE",
     "confidence_score": 1.0,
-    "processing_status": "SUCCESS"
+    "processing_status": "SUCCESS",
+    "valid": true,
+    "errors": []
 }

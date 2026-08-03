@@ -1,28 +1,37 @@
 """
 OrderIQ Database Manager
-
-Sprint 3
-Version: 1.0
+Production Version
 """
 
 import sqlite3
+from pathlib import Path
+
+
+DB_FILE = Path("database/bse_orders_v2.db")
 
 
 class DatabaseManager:
 
     def __init__(self):
 
-        self.connection = sqlite3.connect(
-            "database/bse_orders_v2.db"
+        DB_FILE.parent.mkdir(
+            parents=True,
+            exist_ok=True
         )
 
+        self.connection = sqlite3.connect(DB_FILE)
+
+        self.connection.row_factory = sqlite3.Row
+
         self.cursor = self.connection.cursor()
+
+        self.create_tables()
 
     def create_tables(self):
 
         self.cursor.execute(
             """
-            CREATE TABLE IF NOT EXISTS announcements (
+            CREATE TABLE IF NOT EXISTS announcements(
 
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
 
@@ -50,11 +59,11 @@ class DatabaseManager:
 
                 source_file TEXT UNIQUE,
 
-                exchange TEXT DEFAULT 'BSE',
+                exchange TEXT,
 
-                confidence_score REAL DEFAULT 0.0,
+                confidence_score REAL,
 
-                processing_status TEXT DEFAULT 'SUCCESS',
+                processing_status TEXT,
 
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 
@@ -64,11 +73,14 @@ class DatabaseManager:
 
         self.connection.commit()
 
-    def insert(self, record: dict):
+    def insert_record(
+        self,
+        record: dict
+    ):
 
         self.cursor.execute(
             """
-            INSERT OR REPLACE INTO announcements (
+            INSERT OR REPLACE INTO announcements(
 
                 company,
                 customer,
@@ -88,7 +100,13 @@ class DatabaseManager:
 
             )
 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES(
+
+                ?,?,?,?,?,?,
+                ?,?,?,?,?,?,
+                ?,?,?
+
+            )
             """,
             (
 
@@ -127,21 +145,11 @@ class DatabaseManager:
 
         self.connection.commit()
 
-    def get_all_records(self):
+    # Backward compatibility
+    def insert(self, record):
 
-        self.cursor.execute(
-            """
-            SELECT *
-            FROM announcements
-            ORDER BY id
-            """
-        )
+        self.insert_record(record)
 
-        return self.cursor.fetchall()
-
-    def close(self):
-
-        self.connection.close()
     def count(self):
 
         self.cursor.execute(
@@ -152,4 +160,19 @@ class DatabaseManager:
         )
 
         return self.cursor.fetchone()[0]
-        
+
+    def get_all_records(self):
+
+        self.cursor.execute(
+            """
+            SELECT *
+            FROM announcements
+            ORDER BY id DESC
+            """
+        )
+
+        return self.cursor.fetchall()
+
+    def close(self):
+
+        self.connection.close()

@@ -1,7 +1,8 @@
 {
-    "company": "Atishay Limited",
-    "announcement_type": "ORDER",
+    "company": "Bharat Sanchar Nigam Limited",
+    "customer": "",
     "announcement_date": "2026-07-07",
+    "announcement_type": "ORDER",
     "awarding_entity": "Bharat Sanchar Nigam Limited, Bhopal",
     "order_value": "Rs. 47.06 Lakhs (Rupees Forty Seven Lakhs and Six ; Thousand Only), inclusive of all applicable duties and taxes",
     "order_value_crore": 0.4706,
@@ -10,8 +11,9 @@
     "domestic": "Domestic",
     "project_description": "Supply, Installation and Commissioning of Wi-Fi, Network and comprehensive AMC work at IIFM, Bhopal",
     "source_file": "02402050-f122-4912-a28b-dde573427a6a.txt",
-    "customer": "",
     "exchange": "BSE",
     "confidence_score": 1.0,
-    "processing_status": "SUCCESS"
+    "processing_status": "SUCCESS",
+    "valid": true,
+    "errors": []
 }

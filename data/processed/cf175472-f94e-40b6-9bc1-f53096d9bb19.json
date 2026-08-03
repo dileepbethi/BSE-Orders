@@ -1,7 +1,8 @@
 {
     "company": "Austere Systems Limited",
-    "announcement_type": "ORDER",
+    "customer": "",
     "announcement_date": "2026-07-07",
+    "announcement_type": "ORDER",
     "awarding_entity": "",
     "order_value": "1,86,60,000",
     "order_value_crore": 1.866,
@@ -10,8 +11,9 @@
     "domestic": "",
     "project_description": "",
     "source_file": "cf175472-f94e-40b6-9bc1-f53096d9bb19.txt",
-    "customer": "",
     "exchange": "BSE",
     "confidence_score": 1.0,
-    "processing_status": "SUCCESS"
+    "processing_status": "SUCCESS",
+    "valid": true,
+    "errors": []
 }

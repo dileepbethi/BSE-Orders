@@ -1,7 +1,8 @@
 {
-    "company": "SIYARAM RECYCLING INDUSTRIES LIMITED",
-    "announcement_type": "ORDER",
+    "company": "Recycling Industries Ltd",
+    "customer": "",
     "announcement_date": "2026-07-07",
+    "announcement_type": "ORDER",
     "awarding_entity": "Saanvi Metal Craft",
     "order_value": "Rs. 1,33,32,466/",
     "order_value_crore": 1.3332,
@@ -10,8 +11,9 @@
     "domestic": "",
     "project_description": "Siyaram Recycling Industries Ltd Saanvi Metal Craft for Brass Scrap Honey, total order worth Rs. 1,33,32,466",
     "source_file": "5b7f92ca-5655-49d3-b995-42eb880d3d90.txt",
-    "customer": "",
     "exchange": "BSE",
     "confidence_score": 1.0,
-    "processing_status": "SUCCESS"
+    "processing_status": "SUCCESS",
+    "valid": true,
+    "errors": []
 }

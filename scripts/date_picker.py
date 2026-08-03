@@ -38,11 +38,11 @@ class DatePicker:
         ).select_option(str(month))
 
         # Select Day
-        page.get_by_text(
-            str(day),
-            exact=True
-        ).click()
-
+        page.locator(
+            ".ngb-dp-day .btn-light:not(.outside)"
+        ).filter(
+            has_text=str(day)
+        ).first.click()
     def select_to_date(
         self,
         page,
@@ -64,7 +64,8 @@ class DatePicker:
             "Select month"
         ).select_option(str(month))
 
-        page.get_by_text(
-            str(day),
-            exact=True
-        ).click()
+        page.locator(
+            ".ngb-dp-day .btn-light:not(.outside)"
+        ).filter(
+            has_text=str(day)
+        ).first.click()

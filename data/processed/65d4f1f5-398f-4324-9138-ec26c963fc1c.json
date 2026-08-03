@@ -1,7 +1,8 @@
 {
-    "company": "Innovision Limited",
-    "announcement_type": "ORDER",
+    "company": "we wish to inform you that Innovision Limited",
+    "customer": "NHAI (National Highways Authority of India)",
     "announcement_date": "2026-07-07",
+    "announcement_type": "ORDER",
     "awarding_entity": "NHAI (National Highways Authority of India)",
     "order_value": "",
     "order_value_crore": null,
@@ -10,8 +11,9 @@
     "domestic": "Domestic",
     "project_description": "Engagement of Innovision Ltd as user fee ; collection agency on the basis of Competitive Bidding through e-Tender for Vaddupalli fee plaza at Anantapur-Kalyandurg section of two lane with paved shoulders on EPC mode under NH(O) in the State of Andhra Pradesh upkeep/maintenance of adjacent Toilet blocks including recouping the consumable items",
     "source_file": "65d4f1f5-398f-4324-9138-ec26c963fc1c.txt",
-    "customer": "NHAI (National Highways Authority of India)",
     "exchange": "BSE",
     "confidence_score": 1.0,
-    "processing_status": "SUCCESS"
+    "processing_status": "SUCCESS",
+    "valid": true,
+    "errors": []
 }
