@@ -14,8 +14,9 @@ from order_value_extractor import OrderValueExtractor
 from entity_extractor import EntityExtractor
 from field_parser import FieldParser
 from field_cleaner import FieldCleaner
+from table_parser_v2 import TableParserV2
 from database_manager import DatabaseManager
-
+from quality_classifier_v2 import QualityClassifierV2
 
 RAW_FOLDER = Path("data/raw")
 PROCESSED_FOLDER = Path("data/processed")
@@ -26,12 +27,24 @@ class PDFParser:
     def __init__(self):
 
         self.company_extractor = CompanyExtractor()
+        ...
+        PROCESSED_FOLDER.mkdir(
+            parents=True,
+            exist_ok=True
+        )
+
+    def load_files(self):
+
+        self.files = []
+        self.company_extractor = CompanyExtractor()
         self.date_extractor = DateExtractor()
         self.order_value_extractor = OrderValueExtractor()
         self.entity_extractor = EntityExtractor()
 
         self.field_parser = FieldParser()
         self.field_cleaner = FieldCleaner()
+        self.table_parser = TableParserV2()
+        self.quality_classifier = QualityClassifierV2()
 
         self.database = DatabaseManager()
 
@@ -42,22 +55,29 @@ class PDFParser:
             exist_ok=True
         )
 
-    def load_files(self):
+def load_files(self):
 
-        self.files = sorted(
-            RAW_FOLDER.glob("*.txt")
-        )
+    self.files = []
 
-        return self.files
+    for txt_file in sorted(RAW_FOLDER.glob("*.txt")):
 
-    def read_file(self, file_path):
+        pdf_file = txt_file.with_suffix(".pdf")
+
+        self.files.append({
+            "txt": txt_file,
+            "pdf": pdf_file
+        })
+
+    return self.files
+
+def read_file(self, file_path):
 
         return file_path.read_text(
             encoding="utf-8",
             errors="ignore"
         )
 
-    def build_record(self, file_path, text):
+def build_record(self, file_path, text):
 
         raw_fields = self.field_parser.parse(text)
 
@@ -71,7 +91,11 @@ class PDFParser:
 
             "awarding_entity": fields["entity_awarding"],
 
-            "order_value": self.order_value_extractor.extract(text),
+"order_value": (
+    fields["order_value"]
+    if fields["order_value"]
+    else self.order_value_extractor.extract(text)
+),
 
             "execution_period": fields["execution_period"],
 
@@ -100,10 +124,7 @@ class PDFParser:
             encoding="utf-8"
 
         )
-
-    def run(self):
-
-        files = self.load_files()
+    def process_files(self, txt_files):
 
         print()
         print("=" * 60)
@@ -111,50 +132,96 @@ class PDFParser:
         print("=" * 60)
         print()
 
-        print(f"Found {len(files)} TXT files")
+        print(f"Found {len(txt_files)} TXT files")
         print()
 
-        for index, file in enumerate(files, start=1):
+        success = 0
 
-            text = self.read_file(file)
+        for index, item in enumerate(txt_files, start=1):
 
-            record = self.build_record(
-                file,
-                text
-            )
+            try:
 
-            self.save_json(
-                file,
-                record
-            )
+                txt_file = item["txt"]
+                
+                text = self.read_file(txt_file)
 
-            self.database.insert(
-                record
-            )
+                quality = self.quality_classifier.classify(text)
 
-            print(f"[{index:02}] {file.name}")
-            print(f"     JSON Saved")
-            print(f"     Database Saved")
+                if not quality["is_procurement"]:
+
+                 print(f"[{index:02}] {txt_file.name}")
+                 print("     Skipped (Not a procurement announcement)")
+                 continue
+
+                record = self.build_record(
+                    txt_file,
+                    text
+
+                 )
+               
+
+                self.save_json(
+                  txt_file,
+                  record
+                )
+                self.database.insert(
+                    record
+                )
+
+                success += 1
+
+                print(f"[{index:02}] {txt_file.name}")
+                print("     JSON Saved")
+                print("     Database Saved")
+
+            except Exception as e:  
+
+                file_name =c( 
+                     item["txt"].name
+                     if isinstance(item,dict)
+                     else str(item)
+                )
+
+                print(f"[ERROR] {file_name}")
+                print(e)
 
         print()
-
         print("=" * 60)
-
-        print(
-            f"Database Records : {self.database.count()}"
-        )
-
+        print("PIPELINE SUMMARY")
         print("=" * 60)
-
+        print(f"Total Files       : {len(txt_files)}")
+        print(f"Processed Records : {success}")
+        print(f"Skipped Records   : {len(txt_files) - success}")
+        print(f"Database Records  : {self.database.count()}")
+        print("=" * 60)
         self.database.close()
 
+        return success
 
+
+    def run(self):
+
+        text = self.read_file(txt_file)
+
+        quality = self.quality_classifier.classify(text)
+
+        if not quality["is_procurement"]:
+
+           print(f"[{index:02}] {txt_file.name}")
+           print("     Skipped (Not a procurement announcement)")
+           continue
+
+record = self.build_record(
+    txt_file,
+    text
+)
+
+    
 def main():
 
     parser = PDFParser()
 
     parser.run()
-
 
 if __name__ == "__main__":
 

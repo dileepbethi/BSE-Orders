@@ -29,8 +29,38 @@ class FieldParser:
 
         return self.clean(value)
 
-    def parse(self, text):
 
+    def extract_sections(self, text):
+
+        """
+        Split SEBI Annexure-I into numbered sections.
+        """
+
+        text = text.replace("\r", "")
+
+        pattern = r"(?m)^(\d+)\.\s"
+
+        matches = list(
+            re.finditer(pattern, text)
+        )
+
+        sections = {}
+
+        for i, match in enumerate(matches):
+
+            number = match.group(1)
+
+            start = match.end()
+
+            if i + 1 < len(matches):
+                end = matches[i + 1].start()
+            else:
+                end = len(text)
+
+            sections[number] = text[start:end].strip()
+
+        return sections
+    def parse(self, text):
         fields = {
             "entity_awarding": "",
             "terms": "",
@@ -135,16 +165,45 @@ class FieldParser:
 
             if current_field:
 
-                # Stop if a new numbered/lettered field starts
-                if re.match(r"^\d+\s", line):
+                # New numbered field like:
+                # 7.
+                # 8.
+                # 9.
+
+                if re.match(r"^\d+\.", line):
+
                     current_field = None
                     continue
 
-                if re.match(r"^[a-zA-Z]\)", line):
+                # Number followed by space
+
+                if re.match(r"^\d+\s", line):
+
+                    current_field = None
+                    continue
+
+                # Lettered bullets
+
+                if re.match(r"^[A-Za-z]\)", line):
+
+                    current_field = None
+                    continue
+
+                # Common SEBI next-field headers
+
+                if (
+                    "whether the promoter" in lower
+                    or "whether the order" in lower
+                    or "nature of interest" in lower
+                    or "additional disclosure" in lower
+                ):
+
                     current_field = None
                     continue
 
                 fields[current_field] += " " + line
                 fields[current_field] = self.clean(fields[current_field])
+
+                
 
         return fields

@@ -1,6 +1,39 @@
-from playwright.sync_api import Page
+from playwright.sync_api import Page, expect
 
+from page_waiter import wait_for_bse_filters
 from date_picker import DatePicker
+
+
+SUB_CATEGORY = "Award of Order / Receipt of Order"
+
+
+def wait_until_option_exists(page: Page, selector: str, option_text: str, timeout=30000):
+
+    page.wait_for_function(
+        """
+        ([selector, option]) => {
+            const ddl = document.querySelector(selector);
+            if (!ddl) return false;
+
+            return [...ddl.options].some(
+                o => o.text.trim() === option
+            );
+        }
+        """,
+        arg=[selector, option_text],
+        timeout=timeout,
+    )
+
+
+def select_dropdown(page: Page, selector: str, label: str):
+
+    print(f"[INFO] Selecting -> {label}")
+
+    dropdown = page.locator(selector)
+
+    expect(dropdown).to_be_visible()
+
+    dropdown.select_option(label=label)
 
 
 def apply_filters(
@@ -13,59 +46,57 @@ def apply_filters(
 
     print("[1/8] Waiting for page...")
 
-    page.wait_for_load_state("domcontentloaded")
-
-    page.locator("#ddlAnnType").wait_for(
-        state="visible",
-        timeout=60000
-    )
-
-    page.locator("#ddlAnnsubmType").wait_for(
-        state="visible",
-        timeout=60000
-    )
-
-    page.locator("#ddlPeriod").wait_for(
-        state="visible",
-        timeout=60000
-    )
-
-    page.locator("#ddlsubcat").wait_for(
-        state="visible",
-        timeout=60000
-    )
+    wait_for_bse_filters(page)
 
     print("[2/8] Segment")
 
-    page.locator("#ddlAnnType").select_option(
-        label="Equity"
+    select_dropdown(
+        page,
+        "#ddlAnnType",
+        "Equity"
     )
 
-    print("[3/8] Announcement Submission Type")
+    print("[3/8] Waiting for Announcement Type...")
 
-    page.locator("#ddlAnnsubmType").select_option(
-        label="Announcement"
+    wait_until_option_exists(
+        page,
+        "#ddlAnnsubmType",
+        "Announcement"
     )
 
-    print("[4/8] Category")
-
-    page.locator("#ddlPeriod").select_option(
-        label="Company Update"
+    select_dropdown(
+        page,
+        "#ddlAnnsubmType",
+        "Announcement"
     )
 
-    print("[INFO] Waiting for Sub Category options...")
+    print("[4/8] Waiting for Category...")
 
-    page.wait_for_function("""
-    () => {
-        const ddl = document.querySelector("#ddlsubcat");
-        return ddl && ddl.options.length > 1;
-    }
-    """, timeout=60000)
+    wait_until_option_exists(
+        page,
+        "#ddlPeriod",
+        "Company Update"
+    )
 
-    print("[5/8] Sub Category")
+    select_dropdown(
+        page,
+        "#ddlPeriod",
+        "Company Update"
+    )
 
-    page.locator("#ddlsubcat").select_option(
-        label="Award of Order / Receipt of Order"
+    print("[5/8] Waiting for Sub Category...")
+
+    wait_until_option_exists(
+        page,
+        "#ddlsubcat",
+        SUB_CATEGORY,
+        timeout=60000
+    )
+
+    select_dropdown(
+        page,
+        "#ddlsubcat",
+        SUB_CATEGORY
     )
 
     print("[6/8] From Date")
@@ -89,6 +120,6 @@ def apply_filters(
         name="Submit"
     ).click()
 
-    page.wait_for_timeout(3000)
+    page.wait_for_load_state("networkidle")
 
     print("[SUCCESS] Filters Applied.")

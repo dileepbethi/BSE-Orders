@@ -2,7 +2,6 @@ from pathlib import Path
 import pdfplumber
 
 
-PDF_FOLDER = Path("data/downloads")
 RAW_FOLDER = Path("data/raw")
 
 
@@ -24,6 +23,8 @@ def extract_text(pdf_file: Path) -> str:
 
 def save_text(pdf_file: Path, text: str):
 
+    RAW_FOLDER.mkdir(parents=True, exist_ok=True)
+
     txt_file = RAW_FOLDER / f"{pdf_file.stem}.txt"
 
     txt_file.write_text(
@@ -34,28 +35,38 @@ def save_text(pdf_file: Path, text: str):
     return txt_file
 
 
-def extract_all_pdfs():
+def process_pdf(pdf_path):
 
-    RAW_FOLDER.mkdir(parents=True, exist_ok=True)
+    pdf_file = Path(pdf_path)
 
-    pdf_files = sorted(PDF_FOLDER.glob("*.pdf"))
+    print(f"[PDF] Reading : {pdf_file.name}")
 
-    print(f"\nFound {len(pdf_files)} PDF files\n")
+    text = extract_text(pdf_file)
+
+    txt_file = save_text(pdf_file, text)
+
+    print(f"[PDF] Saved : {txt_file.name}")
+
+    return {
+        "pdf": pdf_file,
+        "txt": txt_file
+    }
+
+
+def process_pdfs(pdf_paths):
+
+    txt_files = []
 
     success = 0
     failed = 0
 
-    for pdf_file in pdf_files:
+    for pdf_path in pdf_paths:
 
         try:
 
-            print(f"Reading : {pdf_file.name}")
+            item = process_pdf(pdf_path)
 
-            text = extract_text(pdf_file)
-
-            txt_file = save_text(pdf_file, text)
-
-            print(f"Saved : {txt_file.name}")
+            txt_files.append(item)
 
             success += 1
 
@@ -63,15 +74,14 @@ def extract_all_pdfs():
 
             failed += 1
 
-            print(f"ERROR : {pdf_file.name}")
             print(e)
 
-    print("\n" + "=" * 60)
+    print()
+    print("=" * 60)
+    print("PDF READER SUMMARY")
+    print("=" * 60)
     print(f"SUCCESS : {success}")
     print(f"FAILED  : {failed}")
     print("=" * 60)
 
-
-if __name__ == "__main__":
-
-    extract_all_pdfs()
+    return txt_files

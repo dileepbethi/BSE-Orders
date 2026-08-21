@@ -21,13 +21,23 @@ class OrderValueExtractor:
 
         patterns = [
 
-            r"Rs\.?\s*([0-9][0-9,]*\.?[0-9]*\s*(?:Lakhs?|Crores?)?)",
+            r"Rs\.?\s*([0-9][0-9,]*\.?[0-9]*\s*(?:Lakhs?|Lakhs|Lakh|Crores?|Crore|Cr)?)",
 
-            r"₹\s*([0-9][0-9,]*\.?[0-9]*\s*(?:Lakhs?|Crores?)?)",
+            r"₹\s*([0-9][0-9,]*\.?[0-9]*\s*(?:Lakhs?|Lakh|Crores?|Crore|Cr)?)",
 
-            r"INR\s*([0-9][0-9,]*\.?[0-9]*\s*(?:Lakhs?|Crores?)?)",
+            r"INR\s*([0-9][0-9,]*\.?[0-9]*\s*(?:Lakhs?|Lakh|Crores?|Crore|Cr)?)",
 
-            r"~\s*INR\s*([0-9][0-9,]*\.?[0-9]*\s*(?:Lakhs?|Crores?)?)"
+            r"USD\s*\$?\s*([0-9][0-9,]*\.?[0-9]*)",
+
+            r"\$\s*([0-9][0-9,]*\.?[0-9]*)",
+
+            r"EUR\s*([0-9][0-9,]*\.?[0-9]*)",
+
+            r"GBP\s*([0-9][0-9,]*\.?[0-9]*)",
+
+            r"value\s*of\s*Rs\.?\s*([0-9][0-9,]*\.?[0-9]*\s*(?:Lakhs?|Crores?|Cr)?)",
+
+            r"worth\s*Rs\.?\s*([0-9][0-9,]*\.?[0-9]*\s*(?:Lakhs?|Crores?|Cr)?)"
 
         ]
 

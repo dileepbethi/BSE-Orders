@@ -6,6 +6,7 @@ Cleans raw fields extracted by FieldParser.
 """
 
 import re
+from datetime import datetime
 
 
 class FieldCleaner:
@@ -87,7 +88,48 @@ class FieldCleaner:
 
     def clean_order_type(self, text):
 
-        return self.normalize(text)
+     text = re.sub(
+        r"registered office.*",
+        "",
+        text,
+        flags=re.IGNORECASE
+     )
+
+     text = re.sub(
+        r"corp\.?\s*office.*",
+        "",
+        text,
+        flags=re.IGNORECASE
+     )
+
+     text = re.sub(
+        r"website:.*",
+        "",
+        text,
+        flags=re.IGNORECASE
+     )
+
+     text = re.sub(
+        r"email:.*",
+        "",
+        text,
+        flags=re.IGNORECASE
+     )
+
+     text = re.sub(
+        r"cin\s*no.*",
+        "",
+        text,
+        flags=re.IGNORECASE
+     )
+
+     text = re.sub(
+        r"\s+",
+        " ",
+        text
+     )
+
+     return self.normalize(text)
 
     def clean_domestic(self, text):
 
@@ -103,15 +145,83 @@ class FieldCleaner:
 
     def clean_execution_period(self, text):
 
-        text = re.sub(
-            r"order\(s\).*?executed",
-            "",
-            text,
-            flags=re.IGNORECASE
-        )
+     text = re.sub(
+        r"order\(s\).*",
+        "",
+        text,
+        flags=re.IGNORECASE
+     )
 
-        return self.normalize(text)
+     text = re.sub(
+        r"registered office.*",
+        "",
+        text,
+        flags=re.IGNORECASE
+     )
+
+     text = re.sub(
+        r"corp\.?\s*office.*",
+        "",
+        text,
+        flags=re.IGNORECASE
+     )
+
+     text = re.sub(
+        r"website:.*",
+        "",
+        text,
+        flags=re.IGNORECASE
+     )
+
+     text = re.sub(
+        r"email:.*",
+        "",
+        text,
+        flags=re.IGNORECASE
+     )
+
+     text = re.sub(
+        r"\s+",
+        " ",
+        text
+     )
+
+     return self.normalize(text)
 
     def clean_order_value(self, text):
 
-        return self.normalize(text)
+     text = re.sub(
+        r"order\(s\)\s*/?\s*contract\(s\)",
+        "",
+        text,
+        flags=re.IGNORECASE
+    ) 
+
+     text = re.sub(
+        r"\s+",
+        " ",
+        text
+     )
+
+     text = re.sub(
+        r"\([^)]*GST[^)]*\)",
+        "",
+        text,
+        flags=re.IGNORECASE
+     )
+
+     text = re.sub(
+        r"\bexclusive of.*",
+        "",
+        text,
+        flags=re.IGNORECASE
+     )
+
+     text = re.sub(
+        r"\bincluding.*",
+        "",
+        text,
+        flags=re.IGNORECASE
+     )
+
+     return self.normalize(text)
