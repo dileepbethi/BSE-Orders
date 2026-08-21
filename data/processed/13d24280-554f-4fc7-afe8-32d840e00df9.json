@@ -1,11 +1,19 @@
 {
-    "company": "SIYARAM RECYCLING INDUSTRIES LIMITED",
-    "announcement_date": "07th July, 2026",
+    "company": "Recycling Industries Ltd",
+    "customer": "",
+    "announcement_date": "2026-07-07",
+    "announcement_type": "ORDER",
     "awarding_entity": "Jay Malbapa Metals",
     "order_value": "Rs. 36,95,760/",
+    "order_value_crore": 0.3696,
     "execution_period": "Within 7 Days",
     "order_type": "Fixed cost",
     "domestic": "",
     "project_description": "Siyaram Recycling Industries Ltd Malbapa Metals for Brass Scrap, total order worth Rs. 36,95,760",
-    "source_file": "13d24280-554f-4fc7-afe8-32d840e00df9.txt"
+    "source_file": "13d24280-554f-4fc7-afe8-32d840e00df9.txt",
+    "exchange": "BSE",
+    "confidence_score": 1.0,
+    "processing_status": "SUCCESS",
+    "valid": true,
+    "errors": []
 }

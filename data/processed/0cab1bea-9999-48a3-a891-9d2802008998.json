@@ -1,11 +1,19 @@
 {
     "company": "Jayant Infratech Limited",
-    "announcement_date": "July 07, 2026",
+    "customer": "",
+    "announcement_date": "2026-07-07",
+    "announcement_type": "ORDER",
     "awarding_entity": "West Central Railway",
     "order_value": "INR ₹13,31,88,572.19/",
+    "order_value_crore": 13.3189,
     "execution_period": "April, 2027",
     "order_type": "",
     "domestic": "Domestic",
     "project_description": "Design, supply, erection, testing and commissioning of Overhead Equipment (OHE) in the Itarsi–Jhujharpur section, including power supply arrangements, modification of the existing OHE system and associated general electrical services in connection with the Itarsi– Nagpur 3rd Line Project",
-    "source_file": "0cab1bea-9999-48a3-a891-9d2802008998.txt"
+    "source_file": "0cab1bea-9999-48a3-a891-9d2802008998.txt",
+    "exchange": "BSE",
+    "confidence_score": 1.0,
+    "processing_status": "SUCCESS",
+    "valid": true,
+    "errors": []
 }

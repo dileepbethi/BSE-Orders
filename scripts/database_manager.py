@@ -1,8 +1,14 @@
 """
 Database Manager
-Version: 1.0
+Version: 3.0
 
-Creates and manages the SQLite database.
+Responsible for:
+
+- Database creation
+- Inserts
+- Search
+- Dashboard statistics
+- Dashboard charts
 """
 
 import sqlite3
@@ -10,6 +16,7 @@ from pathlib import Path
 
 
 DATABASE_FOLDER = Path("database")
+
 DATABASE_FOLDER.mkdir(
     parents=True,
     exist_ok=True
@@ -27,6 +34,10 @@ class DatabaseManager:
         self.cursor = self.connection.cursor()
 
         self.create_table()
+
+    # =====================================================
+    # DATABASE SETUP
+    # =====================================================
 
     def create_table(self):
 
@@ -62,11 +73,15 @@ class DatabaseManager:
 
         self.connection.commit()
 
+    # =====================================================
+    # INSERT
+    # =====================================================
+
     def insert(self, record):
 
         self.cursor.execute("""
 
-        INSERT OR REPLACE INTO orders (
+        INSERT OR IGNORE INTO orders (
 
             company,
             announcement_date,
@@ -102,6 +117,10 @@ class DatabaseManager:
 
         self.connection.commit()
 
+    # =====================================================
+    # BASIC METHODS
+    # =====================================================
+
     def count(self):
 
         self.cursor.execute(
@@ -109,7 +128,6 @@ class DatabaseManager:
         )
 
         return self.cursor.fetchone()[0]
-
 
     def get_all(self):
 
@@ -124,7 +142,6 @@ class DatabaseManager:
         """)
 
         return self.cursor.fetchall()
-
 
     def find_company(self, company):
 
@@ -142,7 +159,6 @@ class DatabaseManager:
 
         return self.cursor.fetchall()
 
-
     def latest(self, limit=20):
 
         self.cursor.execute("""
@@ -158,6 +174,108 @@ class DatabaseManager:
         """, (limit,))
 
         return self.cursor.fetchall()
+    # =====================================================
+    # DASHBOARD METHODS
+    # =====================================================
+
+    def get_total_orders(self):
+
+        return self.count()
+
+    def get_total_companies(self):
+
+        self.cursor.execute("""
+
+            SELECT COUNT(DISTINCT company)
+
+            FROM orders
+
+        """)
+
+        return self.cursor.fetchone()[0]
+
+    def get_domestic_orders(self):
+
+        self.cursor.execute("""
+
+            SELECT COUNT(*)
+
+            FROM orders
+
+            WHERE LOWER(domestic) = 'domestic'
+
+        """)
+
+        return self.cursor.fetchone()[0]
+
+    def get_international_orders(self):
+
+        self.cursor.execute("""
+
+            SELECT COUNT(*)
+
+            FROM orders
+
+            WHERE LOWER(domestic) = 'international'
+
+        """)
+
+        return self.cursor.fetchone()[0]
+
+    def get_monthly_orders(self):
+
+        self.cursor.execute("""
+
+            SELECT
+                SUBSTR(announcement_date, 6, 2) AS month,
+                COUNT(*) AS total
+
+            FROM orders
+
+            WHERE announcement_date IS NOT NULL
+              AND announcement_date != ''
+
+            GROUP BY month
+
+            ORDER BY month
+
+        """)
+
+        rows = self.cursor.fetchall()
+
+        month_names = {
+            "01": "Jan",
+            "02": "Feb",
+            "03": "Mar",
+            "04": "Apr",
+            "05": "May",
+            "06": "Jun",
+            "07": "Jul",
+            "08": "Aug",
+            "09": "Sep",
+            "10": "Oct",
+            "11": "Nov",
+            "12": "Dec",
+        }
+
+        result = []
+
+        for month, total in rows:
+
+            result.append({
+                "month": month_names.get(month, month),
+                "value": total
+            })
+
+        return result
+
+    # =====================================================
+    # CONNECTION METHODS
+    # =====================================================
+
+    def get_connection(self):
+
+        return self.connection
 
     def close(self):
 

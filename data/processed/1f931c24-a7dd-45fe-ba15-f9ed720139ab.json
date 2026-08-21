@@ -1,11 +1,19 @@
 {
     "company": "Texmaco Rail & Engineering Limited",
-    "announcement_date": "",
+    "customer": "",
+    "announcement_date": "2026-07-07",
+    "announcement_type": "ORDER",
     "awarding_entity": "Central Warehousing Corporation",
     "order_value": "Rs. 70.72 crores (",
+    "order_value_crore": 70.72,
     "execution_period": "",
     "order_type": "Manufacture and Supply of BLSS rakes along with Brake Van",
     "domestic": "Domestic",
     "project_description": "Manufacture and Supply of BLSS rakes along with Brake Van",
-    "source_file": "1f931c24-a7dd-45fe-ba15-f9ed720139ab.txt"
+    "source_file": "1f931c24-a7dd-45fe-ba15-f9ed720139ab.txt",
+    "exchange": "BSE",
+    "confidence_score": 1.0,
+    "processing_status": "SUCCESS",
+    "valid": true,
+    "errors": []
 }

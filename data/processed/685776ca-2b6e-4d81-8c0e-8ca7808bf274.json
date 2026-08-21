@@ -1,11 +1,19 @@
 {
-    "company": "Artefact Projects Limited",
-    "announcement_date": "September 09, 2015",
+    "company": "ARTEFACT PROJECTS LTD",
+    "customer": "",
+    "announcement_date": "2015-09-09",
+    "announcement_type": "ORDER",
     "awarding_entity": "Authority of India",
     "order_value": "2,93,05,000",
+    "order_value_crore": 2.9305,
     "execution_period": "",
     "order_type": "",
     "domestic": "",
     "project_description": "|4 Timep eriod, if any, associated with the order(s)/contract(s); 38 Months [ 5 Broad commercial consideration or size of the Rs. 2,93,05,000/- order(s)/contract(s)",
-    "source_file": "685776ca-2b6e-4d81-8c0e-8ca7808bf274.txt"
+    "source_file": "685776ca-2b6e-4d81-8c0e-8ca7808bf274.txt",
+    "exchange": "BSE",
+    "confidence_score": 1.0,
+    "processing_status": "SUCCESS",
+    "valid": true,
+    "errors": []
 }

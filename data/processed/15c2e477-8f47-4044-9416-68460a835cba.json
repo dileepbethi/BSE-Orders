@@ -1,11 +1,19 @@
 {
-    "company": "Deep Industries Limited",
-    "announcement_date": "July 07, 2026",
+    "company": "Oil and Natural Gas Corporation Limited",
+    "customer": "",
+    "announcement_date": "2026-07-07",
+    "announcement_type": "ORDER",
     "awarding_entity": "Oil and Natural Gas Corporation Limited",
     "order_value": "The total estimated value of the said award is ; approximately INR 49.10 crores",
+    "order_value_crore": 49.1,
     "execution_period": "",
     "order_type": "As per point no. 2",
     "domestic": "Domestic",
     "project_description": "Charter hiring services for Natural Gas ; Compression from Oil and Natural Gas Corporation Limited at Paliyad of Ahmedabad asset",
-    "source_file": "15c2e477-8f47-4044-9416-68460a835cba.txt"
+    "source_file": "15c2e477-8f47-4044-9416-68460a835cba.txt",
+    "exchange": "BSE",
+    "confidence_score": 1.0,
+    "processing_status": "SUCCESS",
+    "valid": true,
+    "errors": []
 }

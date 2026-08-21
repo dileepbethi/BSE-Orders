@@ -6,6 +6,8 @@ a manually verified Gold Dataset.
 """
 
 import json
+import re
+from datetime import datetime
 from pathlib import Path
 
 GOLD_DATASET = Path("data/gold_dataset.json")
@@ -53,22 +55,89 @@ class AccuracyFramework:
                 records[file.stem] = json.load(f)
 
         return records
+    def normalize_text(self, value):
 
+        if value is None:
+            return ""
+
+        value = str(value).strip().lower()
+
+        value = re.sub(r"\s+", " ", value)
+
+        return value
+    def normalize_date(self, value):
+
+        if value is None:
+            return ""
+
+        value = self.normalize_text(value)
+        value = " ".join(word.capitalize() for word in value.split())
+
+        value = re.sub(
+            r"(\d+)(st|nd|rd|th)",
+            r"\1",
+            value
+        )
+
+        value = value.replace(",", "")
+
+        formats = [
+
+        "%Y-%m-%d",
+
+        "%d.%m.%Y",
+
+        "%d-%m-%Y",
+
+        "%d/%m/%Y",
+
+        "%B %d %Y",
+
+        "%b %d %Y",
+
+        "%d %B %Y",
+
+        "%d %b %Y",
+
+    ]
+
+        for fmt in formats:
+
+            try:
+
+                return datetime.strptime(
+                value,
+                fmt
+            ).strftime("%Y-%m-%d")
+
+            except ValueError:
+                pass
+
+        return value
+    
     def compare_field(
         self,
         expected,
-        actual
+        actual,
+        field=None
     ):
 
         if expected is None:
-
             return True
 
-        expected = str(expected).strip().lower()
-        actual = str(actual).strip().lower()
+        if field == "announcement_date":
+
+            expected = self.normalize_date(expected)
+            actual = self.normalize_date(actual)
+
+           
+
+        else:
+
+            expected = self.normalize_text(expected)
+            actual = self.normalize_text(actual)
 
         return expected == actual
-
     def evaluate(self):
 
         processed = self.load_processed_records()
@@ -91,8 +160,10 @@ class AccuracyFramework:
                 ),
                 "announcement_date": self.compare_field(
                     expected.get("announcement_date"),
-                    actual.get("announcement_date")
+                    actual.get("announcement_date"),
+                    "announcement_date"
                 ),
+                
                 "awarding_entity": self.compare_field(
                     expected.get("awarding_entity"),
                     actual.get("awarding_entity")
@@ -203,4 +274,3 @@ def main():
 if __name__ == "__main__":
 
     main()
-

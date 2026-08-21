@@ -1,0 +1,4 @@
+filename,expected_order_value,status,notes
+9ff4d4f2-f882-4d72-b7cd-a6d8ac193bf1.txt,"18,53,66,820",FAIL,RailTel multiline INR
+75e30e05-48d5-43b2-b1fd-e847005e67cf.txt,"157.97 Lakhs",FAIL,Cosmic aggregated value
+0d2c51ca-ad5b-4a5c-ba6d-f7b0a60f4944.txt,"",PASS,Waaree amount not disclosed

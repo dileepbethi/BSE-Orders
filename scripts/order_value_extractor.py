@@ -54,5 +54,43 @@ class OrderValueExtractor:
                 return self.clean(
                     match.group(1)
                 )
+        return ""
+            
+    def convert_to_crore(self, value: str):
 
+        if not value:
+            return None
+
+        text = value.lower()
+
+        import re
+
+        # Crore
+        m = re.search(r"([\d,.]+)\s*(crore|cr)", text)
+        if m:
+            try:
+                return round(float(m.group(1).replace(",", "")), 4)
+            except:
+                return None
+
+        # Lakh
+        m = re.search(r"([\d,.]+)\s*lakh", text)
+        if m:
+            try:
+                lakhs = float(m.group(1).replace(",", ""))
+                return round(lakhs / 100, 4)
+            except:
+                return None
+
+        # Plain rupees
+        m = re.search(r"([\d,]+)", text)
+        if m:
+            try:
+                rupees = float(m.group(1).replace(",", ""))
+                return round(rupees / 10000000, 4)
+            except:
+                return None
+
+        return None
+    
         return ""

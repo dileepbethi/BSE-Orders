@@ -1,11 +1,19 @@
 {
-    "company": "CHIRAHARIT LIMITED",
-    "announcement_date": "January 30, 2026",
+    "company": "Chiraharit Limited",
+    "customer": "",
+    "announcement_date": "2026-07-07",
+    "announcement_type": "ORDER",
     "awarding_entity": "Zetwerk Manufacturing Businesses Contract/Order Limited",
     "order_value": "Rs.46,48,350/- (Rupees Forty-Six Lakh Forty-Eight Thousand and Three Hundred and Fifty only)",
+    "order_value_crore": 0.4648,
     "execution_period": "Delivery schedule: As per the Purchase /",
     "order_type": "Fittings for Solar Module Cleaning System",
     "domestic": "Domestic",
     "project_description": "Supply of Pipes & Fittings as per BOQ Location of Supply: Maharashtra Scope has Installation/Service: Yes",
-    "source_file": "6524d91e-7f44-4c55-95b7-fd6be0881a3f.txt"
+    "source_file": "6524d91e-7f44-4c55-95b7-fd6be0881a3f.txt",
+    "exchange": "BSE",
+    "confidence_score": 1.0,
+    "processing_status": "SUCCESS",
+    "valid": true,
+    "errors": []
 }

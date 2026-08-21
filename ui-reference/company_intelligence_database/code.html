@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OrderIQ | Company Intelligence Grid</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#311400",
+                        "on-error": "#690005",
+                        "primary-fixed-dim": "#adc6ff",
+                        "secondary-fixed": "#6ffbbe",
+                        "secondary-fixed-dim": "#4edea3",
+                        "inverse-surface": "#e1e2ec",
+                        "on-surface-variant": "#c2c6d6",
+                        "tertiary": "#ffb786",
+                        "tertiary-fixed-dim": "#ffb786",
+                        "secondary": "#4edea3",
+                        "surface-container-high": "#272a31",
+                        "primary": "#adc6ff",
+                        "on-surface": "#e1e2ec",
+                        "surface-bright": "#363941",
+                        "on-primary-container": "#00285d",
+                        "surface-container": "#1d2027",
+                        "tertiary-fixed": "#ffdcc6",
+                        "error-container": "#93000a",
+                        "on-secondary-fixed": "#002113",
+                        "on-secondary-container": "#00311f",
+                        "on-secondary": "#003824",
+                        "on-error-container": "#ffdad6",
+                        "on-tertiary-container": "#461f00",
+                        "on-tertiary": "#502400",
+                        "on-tertiary-fixed-variant": "#723600",
+                        "on-secondary-fixed-variant": "#005236",
+                        "surface-container-highest": "#32353c",
+                        "primary-fixed": "#d8e2ff",
+                        "primary-container": "#4d8eff",
+                        "on-primary": "#002e6a",
+                        "outline": "#8c909f",
+                        "surface-container-low": "#191b23",
+                        "surface-dim": "#10131a",
+                        "surface-container-lowest": "#0b0e15",
+                        "surface-tint": "#adc6ff",
+                        "secondary-container": "#00a572",
+                        "on-background": "#e1e2ec",
+                        "inverse-on-surface": "#2e3038",
+                        "surface-variant": "#32353c",
+                        "outline-variant": "#424754",
+                        "error": "#ffb4ab",
+                        "inverse-primary": "#005ac2",
+                        "tertiary-container": "#df7412",
+                        "background": "#10131a",
+                        "on-primary-fixed": "#001a42",
+                        "on-primary-fixed-variant": "#004395",
+                        "surface": "#10131a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "base": "8px",
+                        "sm": "8px",
+                        "xs": "4px",
+                        "xl": "32px",
+                        "container-margin": "24px",
+                        "lg": "24px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "title-sm": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "data-mono": ["JetBrains Mono"],
+                        "display-lg": ["Inter"],
+                        "label-caps": ["Inter"]
+                    },
+                    "fontSize": {
+                        "title-sm": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "data-mono": ["13px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #0F172A;
+            color: #E1E2EC;
+            font-family: 'Inter', sans-serif;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #191b23;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #424754;
+            border-radius: 10px;
+        }
+        .table-row-hover:hover {
+            background-color: rgba(51, 65, 85, 0.5);
+        }
+        .glass-substrate {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(8px);
+            border: 1px solid #334155;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body class="flex min-h-screen overflow-hidden">
+<!-- SideNavBar Shell -->
+<aside class="w-[280px] h-screen sticky left-0 top-0 bg-surface-container border-r border-outline-variant flex flex-col overflow-y-auto custom-scrollbar z-50">
+<div class="px-lg py-md flex flex-col gap-xs">
+<div class="flex items-center gap-md mb-xl">
+<div class="w-10 h-10 bg-primary flex items-center justify-center rounded">
+<span class="material-symbols-outlined text-on-primary" style="font-variation-settings: 'FILL' 1;">analytics</span>
+</div>
+<div>
+<h1 class="font-display-lg text-title-sm font-bold text-primary">OrderIQ</h1>
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">Procurement Intel</p>
+</div>
+</div>
+<nav class="flex flex-col gap-xs">
+<!-- Dashboard -->
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 rounded font-body-md" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<!-- Companies (Active) -->
+<a class="flex items-center gap-md px-md py-sm border-l-4 border-primary bg-surface-container-highest text-primary font-bold transition-transform duration-200 translate-x-1 font-body-md" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">business</span>
+<span>Companies</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 rounded font-body-md" href="#">
+<span class="material-symbols-outlined">campaign</span>
+<span>Announcements</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 rounded font-body-md" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span>Order Intelligence</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 rounded font-body-md" href="#">
+<span class="material-symbols-outlined">description</span>
+<span>Documents</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 rounded font-body-md" href="#">
+<span class="material-symbols-outlined">find_in_page</span>
+<span>PDF Review</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 rounded font-body-md" href="#">
+<span class="material-symbols-outlined">psychology</span>
+<span>AI Insights</span>
+</a>
+<div class="h-px bg-outline-variant my-md mx-md opacity-50"></div>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 rounded font-body-md" href="#">
+<span class="material-symbols-outlined">monitoring</span>
+<span>Parser Monitoring</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 rounded font-body-md" href="#">
+<span class="material-symbols-outlined">query_stats</span>
+<span>Analytics</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 rounded font-body-md" href="#">
+<span class="material-symbols-outlined">visibility</span>
+<span>Watchlist</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 rounded font-body-md" href="#">
+<span class="material-symbols-outlined">notifications_active</span>
+<span>Alerts</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 rounded font-body-md" href="#">
+<span class="material-symbols-outlined">database</span>
+<span>Database</span>
+</a>
+<div class="mt-auto pt-xl">
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-colors duration-200 rounded font-body-md" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+</div>
+</nav>
+</div>
+</aside>
+<div class="flex-1 flex flex-col min-w-0 overflow-hidden bg-background">
+<!-- TopNavBar Shell -->
+<header class="h-16 flex justify-between items-center px-lg bg-surface-container border-b border-outline-variant sticky top-0 z-50">
+<div class="flex items-center gap-xl flex-1">
+<div class="relative w-full max-w-md focus-within:ring-1 focus-within:ring-primary rounded">
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-surface-container-low border-none rounded pl-10 pr-md py-base text-body-md placeholder:text-outline focus:ring-0" placeholder="Search companies, symbols, or sector intelligence..." type="text"/>
+</div>
+<nav class="hidden md:flex items-center gap-lg">
+<a class="text-primary border-b-2 border-primary pb-1 font-title-sm" href="#">Institutional Research</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<button class="bg-primary text-on-primary px-md py-xs rounded font-title-sm hover:brightness-110 transition-all">
+                    + New Announcement
+                </button>
+<div class="flex items-center gap-base border-l border-outline-variant pl-md ml-xs">
+<button class="p-xs text-on-surface-variant hover:text-primary transition-all">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-xs text-on-surface-variant hover:text-primary transition-all">
+<span class="material-symbols-outlined">apps</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant ml-xs">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a corporate financial analyst in a dark suit, set against a blurred modern office background with soft blue ambient lighting. The style is sharp, clean, and high-end, representing the authoritative and precise nature of the OrderIQ brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6v8QWeLuwu4_0YE-PM54Y3S8it0CFgle00Nj4i0sCaOfrX-do0h6wk4-2joNQ-iZWq7CZpZRl9f3erwcA9Kp9CRmWP7HlOnQDigAZlusfml1nwcaVMubfcaUDxE0o0VwvMXat6blVJ4BN_RpTsVsCVoP0W00AqZPUBjUtHFf7JONOv_FXArfHDBznGkRtO2rfo74X3QfCrGwUe2JfRBC8Qs2WvO41nwuXmmTHEo3XoL3kzfGeAwE2kQ"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 overflow-y-auto custom-scrollbar p-lg space-y-lg relative">
+<!-- Animated Background Gradient Layer -->
+<div class="absolute top-0 right-0 w-1/3 h-1/2 bg-primary/5 blur-[120px] rounded-full -z-10"></div>
+<div class="absolute bottom-0 left-0 w-1/4 h-1/3 bg-secondary/5 blur-[100px] rounded-full -z-10"></div>
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-md">
+<div>
+<h2 class="font-display-lg text-display-lg text-on-surface">Company Intelligence Database</h2>
+<p class="font-body-md text-on-surface-variant flex items-center gap-xs">
+<span class="text-secondary font-bold">1,450 Companies</span> indexed across 24 market segments
+                    </p>
+</div>
+<div class="flex items-center gap-sm">
+<button class="flex items-center gap-xs px-md py-xs bg-surface-container-highest border border-outline-variant rounded hover:bg-surface-container-high transition-colors text-body-md">
+<span class="material-symbols-outlined text-[20px]">file_download</span>
+                        Export to Excel
+                    </button>
+<button class="flex items-center gap-xs px-md py-xs bg-surface-container-highest border border-outline-variant rounded hover:bg-surface-container-high transition-colors text-body-md">
+<span class="material-symbols-outlined text-[20px]">terminal</span>
+                        Bloomberg Terminal
+                    </button>
+</div>
+</div>
+<!-- Advanced Filters -->
+<div class="glass-substrate rounded-xl p-md flex flex-wrap items-center gap-md">
+<div class="flex flex-col gap-xs flex-1 min-w-[180px]">
+<label class="text-[10px] uppercase font-bold text-outline tracking-wider">Sector</label>
+<select class="bg-surface-container-lowest border border-outline-variant rounded px-sm py-xs text-body-md focus:ring-1 focus:ring-primary focus:border-primary">
+<option>All Sectors</option>
+<option>Infrastructure</option>
+<option>Railways</option>
+<option>Power</option>
+<option>Defense</option>
+</select>
+</div>
+<div class="flex flex-col gap-xs flex-1 min-w-[140px]">
+<label class="text-[10px] uppercase font-bold text-outline tracking-wider">Market Cap</label>
+<div class="flex bg-surface-container-lowest border border-outline-variant rounded p-[2px]">
+<button class="flex-1 text-[11px] py-1 bg-surface-container-highest rounded text-on-surface">Large</button>
+<button class="flex-1 text-[11px] py-1 text-on-surface-variant hover:text-on-surface">Mid</button>
+<button class="flex-1 text-[11px] py-1 text-on-surface-variant hover:text-on-surface">Small</button>
+</div>
+</div>
+<div class="flex flex-col gap-xs flex-1 min-w-[180px]">
+<label class="text-[10px] uppercase font-bold text-outline tracking-wider">Order Book Size</label>
+<select class="bg-surface-container-lowest border border-outline-variant rounded px-sm py-xs text-body-md">
+<option>&gt; ₹10,000 Cr</option>
+<option>&gt; ₹50,000 Cr</option>
+<option>&gt; ₹1.0 Lakh Cr</option>
+</select>
+</div>
+<div class="flex flex-col gap-xs w-[120px]">
+<label class="text-[10px] uppercase font-bold text-outline tracking-wider">Exchange</label>
+<select class="bg-surface-container-lowest border border-outline-variant rounded px-sm py-xs text-body-md">
+<option>NSE/BSE</option>
+<option>NSE Only</option>
+<option>BSE Only</option>
+</select>
+</div>
+<div class="flex flex-col gap-xs w-[180px]">
+<label class="text-[10px] uppercase font-bold text-outline tracking-wider">Last Announcement</label>
+<div class="flex items-center gap-xs bg-surface-container-lowest border border-outline-variant rounded px-sm py-xs">
+<span class="material-symbols-outlined text-[18px] text-outline">calendar_today</span>
+<input class="bg-transparent border-none p-0 text-body-md focus:ring-0 w-full" type="text" value="Last 30 Days"/>
+</div>
+</div>
+<div class="flex items-end h-full self-end">
+<button class="w-10 h-10 bg-surface-container-highest border border-outline-variant rounded flex items-center justify-center hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">filter_list</span>
+</button>
+</div>
+</div>
+<!-- Main Data Table -->
+<div class="glass-substrate rounded-xl overflow-hidden flex flex-col">
+<div class="overflow-x-auto custom-scrollbar">
+<table class="w-full text-left border-collapse min-w-[1200px]">
+<thead>
+<tr class="bg-surface-container-high/50 border-b-2 border-outline-variant">
+<th class="px-md py-sm text-label-caps text-outline uppercase">Company Name</th>
+<th class="px-md py-sm text-label-caps text-outline uppercase">NSE Symbol</th>
+<th class="px-md py-sm text-label-caps text-outline uppercase">Sector</th>
+<th class="px-md py-sm text-label-caps text-outline uppercase text-right">Orders (YTD)</th>
+<th class="px-md py-sm text-label-caps text-outline uppercase text-right">Order Value (₹)</th>
+<th class="px-md py-sm text-label-caps text-outline uppercase text-right">Order Book (₹)</th>
+<th class="px-md py-sm text-label-caps text-outline uppercase">Last Announcement</th>
+<th class="px-md py-sm text-label-caps text-outline uppercase text-center">Verification</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30">
+<!-- L&T -->
+<tr class="table-row-hover transition-colors">
+<td class="px-md py-sm font-semibold text-on-surface">Larsen &amp; Toubro Ltd.</td>
+<td class="px-md py-sm font-data-mono text-primary">LT</td>
+<td class="px-md py-sm">Infrastructure</td>
+<td class="px-md py-sm text-right font-data-mono">142</td>
+<td class="px-md py-sm text-right font-data-mono">₹1.2 Lakh Cr</td>
+<td class="px-md py-sm text-right font-data-mono">₹4.8 Lakh Cr</td>
+<td class="px-md py-sm text-body-sm text-on-surface-variant">24 May 2024</td>
+<td class="px-md py-sm text-center">
+<span class="inline-flex items-center gap-xs px-base py-[2px] bg-secondary-container/20 text-secondary border border-secondary/30 rounded-full text-[10px] font-bold uppercase">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+                                        Verified
+                                    </span>
+</td>
+</tr>
+<!-- BEL -->
+<tr class="table-row-hover transition-colors">
+<td class="px-md py-sm font-semibold text-on-surface">Bharat Electronics Ltd.</td>
+<td class="px-md py-sm font-data-mono text-primary">BEL</td>
+<td class="px-md py-sm">Defense</td>
+<td class="px-md py-sm text-right font-data-mono">86</td>
+<td class="px-md py-sm text-right font-data-mono">₹38,200 Cr</td>
+<td class="px-md py-sm text-right font-data-mono">₹75,000 Cr</td>
+<td class="px-md py-sm text-body-sm text-on-surface-variant">21 May 2024</td>
+<td class="px-md py-sm text-center">
+<span class="inline-flex items-center gap-xs px-base py-[2px] bg-secondary-container/20 text-secondary border border-secondary/30 rounded-full text-[10px] font-bold uppercase">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+                                        Verified
+                                    </span>
+</td>
+</tr>
+<!-- HAL -->
+<tr class="table-row-hover transition-colors">
+<td class="px-md py-sm font-semibold text-on-surface">Hindustan Aeronautics Ltd.</td>
+<td class="px-md py-sm font-data-mono text-primary">HAL</td>
+<td class="px-md py-sm">Defense/Aero</td>
+<td class="px-md py-sm text-right font-data-mono">12</td>
+<td class="px-md py-sm text-right font-data-mono">₹94,000 Cr</td>
+<td class="px-md py-sm text-right font-data-mono">₹1.1 Lakh Cr</td>
+<td class="px-md py-sm text-body-sm text-on-surface-variant">15 May 2024</td>
+<td class="px-md py-sm text-center">
+<span class="inline-flex items-center gap-xs px-base py-[2px] bg-secondary-container/20 text-secondary border border-secondary/30 rounded-full text-[10px] font-bold uppercase">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+                                        Verified
+                                    </span>
+</td>
+</tr>
+<!-- RVNL -->
+<tr class="table-row-hover transition-colors">
+<td class="px-md py-sm font-semibold text-on-surface">Rail Vikas Nigam Ltd.</td>
+<td class="px-md py-sm font-data-mono text-primary">RVNL</td>
+<td class="px-md py-sm">Railways</td>
+<td class="px-md py-sm text-right font-data-mono">45</td>
+<td class="px-md py-sm text-right font-data-mono">₹12,400 Cr</td>
+<td class="px-md py-sm text-right font-data-mono">₹65,000 Cr</td>
+<td class="px-md py-sm text-body-sm text-on-surface-variant">28 May 2024</td>
+<td class="px-md py-sm text-center">
+<span class="inline-flex items-center gap-xs px-base py-[2px] bg-tertiary-container/20 text-tertiary border border-tertiary/30 rounded-full text-[10px] font-bold uppercase">
+<span class="material-symbols-outlined text-[14px]">history</span>
+                                        Pending
+                                    </span>
+</td>
+</tr>
+<!-- IRCON -->
+<tr class="table-row-hover transition-colors">
+<td class="px-md py-sm font-semibold text-on-surface">Ircon International Ltd.</td>
+<td class="px-md py-sm font-data-mono text-primary">IRCON</td>
+<td class="px-md py-sm">Railways</td>
+<td class="px-md py-sm text-right font-data-mono">31</td>
+<td class="px-md py-sm text-right font-data-mono">₹8,900 Cr</td>
+<td class="px-md py-sm text-right font-data-mono">₹32,000 Cr</td>
+<td class="px-md py-sm text-body-sm text-on-surface-variant">26 May 2024</td>
+<td class="px-md py-sm text-center">
+<span class="inline-flex items-center gap-xs px-base py-[2px] bg-secondary-container/20 text-secondary border border-secondary/30 rounded-full text-[10px] font-bold uppercase">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+                                        Verified
+                                    </span>
+</td>
+</tr>
+<!-- NBCC -->
+<tr class="table-row-hover transition-colors">
+<td class="px-md py-sm font-semibold text-on-surface">NBCC (India) Ltd.</td>
+<td class="px-md py-sm font-data-mono text-primary">NBCC</td>
+<td class="px-md py-sm">Construction</td>
+<td class="px-md py-sm text-right font-data-mono">54</td>
+<td class="px-md py-sm text-right font-data-mono">₹14,200 Cr</td>
+<td class="px-md py-sm text-right font-data-mono">₹55,000 Cr</td>
+<td class="px-md py-sm text-body-sm text-on-surface-variant">30 May 2024</td>
+<td class="px-md py-sm text-center">
+<span class="inline-flex items-center gap-xs px-base py-[2px] bg-secondary-container/20 text-secondary border border-secondary/30 rounded-full text-[10px] font-bold uppercase">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+                                        Verified
+                                    </span>
+</td>
+</tr>
+<!-- Tata Projects -->
+<tr class="table-row-hover transition-colors">
+<td class="px-md py-sm font-semibold text-on-surface">Tata Projects Ltd.</td>
+<td class="px-md py-sm font-data-mono text-primary">TATA_PRJ</td>
+<td class="px-md py-sm">Infrastructure</td>
+<td class="px-md py-sm text-right font-data-mono">22</td>
+<td class="px-md py-sm text-right font-data-mono">₹18,500 Cr</td>
+<td class="px-md py-sm text-right font-data-mono">₹45,000 Cr</td>
+<td class="px-md py-sm text-body-sm text-on-surface-variant">12 May 2024</td>
+<td class="px-md py-sm text-center">
+<span class="inline-flex items-center gap-xs px-base py-[2px] bg-outline-variant/20 text-on-surface-variant border border-outline-variant/30 rounded-full text-[10px] font-bold uppercase">
+<span class="material-symbols-outlined text-[14px]">warning</span>
+                                        Partial
+                                    </span>
+</td>
+</tr>
+<!-- JSW Energy -->
+<tr class="table-row-hover transition-colors">
+<td class="px-md py-sm font-semibold text-on-surface">JSW Energy Ltd.</td>
+<td class="px-md py-sm font-data-mono text-primary">JSWENERGY</td>
+<td class="px-md py-sm">Power</td>
+<td class="px-md py-sm text-right font-data-mono">18</td>
+<td class="px-md py-sm text-right font-data-mono">₹22,100 Cr</td>
+<td class="px-md py-sm text-right font-data-mono">₹35,000 Cr</td>
+<td class="px-md py-sm text-body-sm text-on-surface-variant">29 May 2024</td>
+<td class="px-md py-sm text-center">
+<span class="inline-flex items-center gap-xs px-base py-[2px] bg-secondary-container/20 text-secondary border border-secondary/30 rounded-full text-[10px] font-bold uppercase">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+                                        Verified
+                                    </span>
+</td>
+</tr>
+<!-- KEC International -->
+<tr class="table-row-hover transition-colors">
+<td class="px-md py-sm font-semibold text-on-surface">KEC International Ltd.</td>
+<td class="px-md py-sm font-data-mono text-primary">KEC</td>
+<td class="px-md py-sm">Power/EPC</td>
+<td class="px-md py-sm text-right font-data-mono">67</td>
+<td class="px-md py-sm text-right font-data-mono">₹14,500 Cr</td>
+<td class="px-md py-sm text-right font-data-mono">₹28,500 Cr</td>
+<td class="px-md py-sm text-body-sm text-on-surface-variant">25 May 2024</td>
+<td class="px-md py-sm text-center">
+<span class="inline-flex items-center gap-xs px-base py-[2px] bg-secondary-container/20 text-secondary border border-secondary/30 rounded-full text-[10px] font-bold uppercase">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+                                        Verified
+                                    </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Footer / Pagination -->
+<footer class="p-md bg-surface-container-high/30 border-t border-outline-variant flex flex-col md:flex-row justify-between items-center gap-md">
+<div class="text-body-sm text-on-surface-variant">
+                        Showing <span class="text-on-surface font-bold">1 - 9</span> of <span class="text-on-surface font-bold">1,450</span> results
+                    </div>
+<div class="flex items-center gap-xs">
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant text-on-surface-variant hover:bg-surface-container-highest transition-colors disabled:opacity-30" disabled="">
+<span class="material-symbols-outlined text-[20px]">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded bg-primary text-on-primary font-bold text-body-sm">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded text-on-surface-variant hover:bg-surface-container-highest text-body-sm transition-colors">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded text-on-surface-variant hover:bg-surface-container-highest text-body-sm transition-colors">3</button>
+<span class="px-xs text-outline">...</span>
+<button class="w-8 h-8 flex items-center justify-center rounded text-on-surface-variant hover:bg-surface-container-highest text-body-sm transition-colors">162</button>
+<button class="w-8 h-8 flex items-center justify-center rounded border border-outline-variant text-on-surface-variant hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-xs text-body-sm text-on-surface-variant">
+                            Rows per page:
+                            <select class="bg-transparent border-none p-0 text-on-surface focus:ring-0 text-body-sm cursor-pointer">
+<option>10</option>
+<option>25</option>
+<option>50</option>
+</select>
+</div>
+</div>
+</footer>
+</div>
+<!-- Bento Summary Cards (Visual Flair) -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg">
+<div class="glass-substrate rounded-xl p-md flex flex-col gap-sm overflow-hidden relative group">
+<div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex justify-between items-start">
+<span class="p-xs bg-primary/20 text-primary rounded">
+<span class="material-symbols-outlined">trending_up</span>
+</span>
+<span class="text-[10px] font-bold text-secondary uppercase">+12.4% vs Prev Qtr</span>
+</div>
+<h3 class="text-on-surface-variant text-label-caps uppercase">Aggregate Order Value</h3>
+<div class="font-display-lg text-display-lg text-on-surface">₹24.8 Lakh Cr</div>
+<div class="w-full h-12 bg-surface-container-lowest/50 rounded mt-auto flex items-end px-xs pb-xs gap-[2px]">
+<div class="flex-1 bg-primary/20 h-[30%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[45%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[38%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[60%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/20 h-[55%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/40 h-[75%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary/60 h-[85%] rounded-t-sm"></div>
+<div class="flex-1 bg-primary h-full rounded-t-sm"></div>
+</div>
+</div>
+<div class="glass-substrate rounded-xl p-md flex flex-col gap-sm overflow-hidden relative group">
+<div class="absolute inset-0 bg-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex justify-between items-start">
+<span class="p-xs bg-secondary/20 text-secondary rounded">
+<span class="material-symbols-outlined">analytics</span>
+</span>
+<span class="text-[10px] font-bold text-primary uppercase">Market Dominant</span>
+</div>
+<h3 class="text-on-surface-variant text-label-caps uppercase">Top Sector Deployment</h3>
+<div class="font-display-lg text-display-lg text-on-surface">Infrastructure</div>
+<div class="flex flex-wrap gap-xs mt-auto">
+<span class="px-base py-xs bg-surface-container-highest rounded text-[11px] text-on-surface">Roads &amp; Bridges</span>
+<span class="px-base py-xs bg-surface-container-highest rounded text-[11px] text-on-surface">Power Transmission</span>
+<span class="px-base py-xs bg-surface-container-highest rounded text-[11px] text-on-surface">Urban Infra</span>
+</div>
+</div>
+<div class="glass-substrate rounded-xl p-md flex flex-col gap-sm overflow-hidden relative group">
+<div class="absolute inset-0 bg-tertiary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex justify-between items-start">
+<span class="p-xs bg-tertiary/20 text-tertiary rounded">
+<span class="material-symbols-outlined">security</span>
+</span>
+<span class="text-[10px] font-bold text-on-surface uppercase">Audit Status</span>
+</div>
+<h3 class="text-on-surface-variant text-label-caps uppercase">Data Integrity Score</h3>
+<div class="font-display-lg text-display-lg text-on-surface">99.8%</div>
+<p class="text-body-sm text-on-surface-variant mt-auto">Verified by OrderIQ AI multi-source consensus engine against BSE/NSE filings.</p>
+</div>
+</div>
+</main>
+</div>
+<!-- Micro-interaction Scripts -->
+<script>
+        document.querySelectorAll('.table-row-hover').forEach(row => {
+            row.addEventListener('click', () => {
+                // Flash effect
+                row.classList.add('bg-primary/20');
+                setTimeout(() => {
+                    row.classList.remove('bg-primary/20');
+                }, 200);
+            });
+        });
+
+        // Search highlight interaction
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('ring-primary', 'ring-1');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('ring-primary', 'ring-1');
+        });
+    </script>
+</body></html>

@@ -1,11 +1,19 @@
 {
     "company": "SIYARAM RECYCLING INDUSTRIES LIMITED",
-    "announcement_date": "07th July, 2026",
+    "customer": "",
+    "announcement_date": "2026-07-07",
+    "announcement_type": "ORDER",
     "awarding_entity": "Metal Scrap India",
     "order_value": "Rs. 46,19,700/",
+    "order_value_crore": 0.462,
     "execution_period": "Within 7 Days",
     "order_type": "Fixed cost",
     "domestic": "",
     "project_description": "Siyaram Recycling Industries Ltd Metal Scrap India for Brass Scrap, total order worth Rs. 46,19,700",
-    "source_file": "114384fe-03c4-4321-b070-8cdf46e033c3.txt"
+    "source_file": "114384fe-03c4-4321-b070-8cdf46e033c3.txt",
+    "exchange": "BSE",
+    "confidence_score": 1.0,
+    "processing_status": "SUCCESS",
+    "valid": true,
+    "errors": []
 }

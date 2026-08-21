@@ -1,11 +1,19 @@
 {
-    "company": "Innovision Limited",
-    "announcement_date": "7th July, 2026",
+    "company": "we wish to inform you that Innovision Limited",
+    "customer": "NHAI (National Highways Authority of India)",
+    "announcement_date": "2026-07-07",
+    "announcement_type": "ORDER",
     "awarding_entity": "NHAI (National Highways Authority of India)",
     "order_value": "",
+    "order_value_crore": null,
     "execution_period": "1 year from 24.08.2026",
-    "order_type": "Toll collection and facility maintenance contract INNOVISION LIMITED ISO 9001: 2008 | ISO/IEC 27001: 2005 | ISO 14001:2015 | OHSAS 18001:2007 |",
+    "order_type": "Toll collection and facility maintenance contract INNOVISION LIMITED",
     "domestic": "Domestic",
     "project_description": "Engagement of Innovision Ltd as user fee ; collection agency on the basis of Competitive Bidding through e-Tender for Vaddupalli fee plaza at Anantapur-Kalyandurg section of two lane with paved shoulders on EPC mode under NH(O) in the State of Andhra Pradesh upkeep/maintenance of adjacent Toilet blocks including recouping the consumable items",
-    "source_file": "183582ac-c542-404a-8659-ebfe72e55830.txt"
+    "source_file": "183582ac-c542-404a-8659-ebfe72e55830.txt",
+    "exchange": "BSE",
+    "confidence_score": 1.0,
+    "processing_status": "SUCCESS",
+    "valid": true,
+    "errors": []
 }

@@ -1,11 +1,19 @@
 {
     "company": "Refex Industries Limited",
-    "announcement_date": "July 7, 2026",
+    "customer": "",
+    "announcement_date": "2026-07-07",
+    "announcement_type": "ORDER",
     "awarding_entity": "",
     "order_value": "~ INR 20.94 Crore",
+    "order_value_crore": 20.94,
     "execution_period": "",
     "order_type": "Ash Transportation to construction site of road projects of NHAI and other Central or d. State Government Road construction department / Authority / PMGSY Road Project",
     "domestic": "Domestic",
     "project_description": "Ash Transportation to construction site of road projects of NHAI and other Central or b. State Government Road construction department / Authority / PMGSY Road Project whether order(s) / contract(s) have been awarded by Domestic entity c. domestic/ international entity",
-    "source_file": "91ec60fb-282d-4f04-9a48-e5aeeef374b0.txt"
+    "source_file": "91ec60fb-282d-4f04-9a48-e5aeeef374b0.txt",
+    "exchange": "BSE",
+    "confidence_score": 1.0,
+    "processing_status": "SUCCESS",
+    "valid": true,
+    "errors": []
 }
